@@ -1,0 +1,314 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head th:substituteby="header :: header">
+</head>
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+    <title>四川交通职业技术学院-教务综合应用管理</title>
+    <style type="text/css">
+        #add, #search {
+            width: 150px;
+            height: 35px;
+            font-weight: bold;
+        }
+
+        .depart {
+            width: 230px !important;
+        }
+
+        .tab_box {
+            width: 90%;
+            margin: 20px auto;
+            color: #666
+        }
+
+        .tab_box td {
+            padding: 10px 5px;
+        }
+
+        .tab_box .ipt_text {
+            width: 220px !important;
+        }
+
+        .tab_box .ipt_btn {
+            width: 80px !important;
+        }
+
+        .tab_box .error {
+            width: 230px !important;
+        }
+
+        .tab_box label {
+            font-size: 14px;
+        }
+
+        a.next, a.pre {
+            padding: 2px 5px;
+            color: #fff;
+        }
+    </style>
+    <!--左导航切换-->
+</head>
+
+<body>
+<!--顶部导航-->
+<input type="hidden" id="current_nav" value="index:departmentsetting:major"/>
+
+<div th:include="topbar :: topbar"></div>
+<div th:include="sidebar :: index_sidebar"></div>
+<!--右侧框架，内容区-->
+<div class="content">
+    <!--修改密码-->
+    <div class="changePsw">
+        <div class="head2Box"><i class="i_q db fl"></i>
+
+            <h2 class="head2">专业管理</h2></div>
+        <div class="form">
+            <form name="changePsw">
+                <table class="tb_operation">
+                    <tr class="tr_head">
+                        <td colspan="2">您可以执行以下操作：</td>
+                    </tr>
+
+                    <tr>
+                        <td align="center" width="50%">
+                            <select name="departmentId" class="ipt_menu depart" id="search_key">
+                                <option selected="true">请选择...</option>
+                                <option th:each="department : ${departments}"
+                                        th:value="${department.name}"
+                                        th:text="${department.name}">Wireframe
+                                </option>
+                            </select>
+                            <input type="button" class="ipt_btn bradius3 bblue" value="按院系搜索" id="search_btn"/></td>
+                        <td align="center" width="50%"><input type="button" class="ipt_btn bradius3 bred" value="添加专业"
+                                                              id="add"/></td>
+                        <input type="hidden" id="search_url" th:value="@{/major/list}"/>
+                    </tr>
+                </table>
+                <table class="tb_xx">
+                    <tr class="tb_head">
+                        <th>No</th>
+                        <th>院系名称</th>
+                        <th>专业名称</th>
+                        <th colspan="2" class="td_operation" style=" background:#333440;">操作</th>
+
+                    </tr>
+                    <tr th:each="major : ${majors.resultData}">
+                        <input type="hidden" class="department_id"
+                               th:value="${major.department!=null?major.department.id:null}"/>
+                        <input type="hidden" class="major_id"
+                               th:value="${major.id}"/>
+                        <td th:text="${majorStat.index+1}"></td>
+                        <td th:text="${major.department!=null?major.department.name:''}">计算机系</td>
+                        <td th:text="${major.name}"></td>
+                        <td>
+                            <div><i class="i_edt db fl"></i><a class="a_opr db fl a_edit" href="javascript:void(0)"
+                                    >编辑</a></div>
+                        </td>
+                        <td>
+                            <div><i class="i_del db fl"></i><a class="a_opr db fl"
+                                                               th:href="@{/major/delete?id=__${major.id}__}">删除</a>
+                            </div>
+                        </td>
+                    </tr>
+
+                    <tr>
+                        <td colspan="7" align="center">
+                            共 <span th:text="${majors.totalCount}"/> 条记录 &nbsp; 第<span
+                                th:text="${majors.currentPageNo}"/>/<span th:text="${majors.totalPageCount}"/>页&nbsp;
+                            <a class="pre bradius3 bgreen" th:if="${majors.previousPage}"
+                               th:href="@{/user_manage/list?pageNo=__${majors.currentPageNo - 1}__}">上一页</a>
+                            <a class="pre bradius3 bgreen" th:if="${!majors.previousPage}">上一页</a>
+                           <span th:each="pageNumber : ${majors.pageNumbers}">
+                              <span th:if="${pageNumber == majors.currentPageNo}">
+                             [<span class="" th:text="${pageNumber}"></span>]
+                             </span>
+                            <span th:if="${pageNumber != majors.currentPageNo}">
+                            <a th:href="@{/user_manage/list?pageNo=__${pageNumber}__}"
+                               th:text="${pageNumber}"></a>
+                             </span>
+                             </span>
+                            &nbsp;
+                            <a class="next bradius3 bgreen" th:if="${majors.nextPage}"
+                               th:href="@{/user_manage/list?pageNo=__${majors.currentPageNo + 1}__}">下一页</a>
+                            <a class="next bradius3 bgreen" th:if="${!majors.nextPage}">下一页</a>
+                        </td>
+                    </tr>
+                </table>
+            </form>
+        </div>
+        <div class="clear">
+        </div>
+    </div>
+</div>
+<!--弹出框-->
+
+<div class="dialog_box" id="add_major_dialog" style="display:none">
+    <div class="dl_title"><strong>添加院系</strong>
+        <a href="javascript:void(0)" title="关闭窗口" class="close_btn" id="closeBtn_add_major">&times;</a>
+    </div>
+    <form id="add_major_form">
+        <input type="hidden" th:value="@{/major/add}" id="add_major_url"/>
+        <table class="tab_box">
+            <tr>
+                <td colspan="2" id="error_msg_for_add_major"></td>
+            </tr>
+            <tr>
+                <td class="font14" width="150" align="right">院系名称:</td>
+                <td>
+                    <select name="departmentId">
+                        <option th:each="department : ${departments}"
+                                th:value="${department.id}"
+                                th:text="${department.name}">Wireframe
+                        </option>
+                    </select>
+                </td>
+            </tr>
+            <tr>
+                <td class="font14" align="right">专业名称:</td>
+                <td>
+                    <input type="text" class="ipt_text" name="name"/>
+
+                    <div class="err-wrap invisible"><label id="error" class="error font12 ">错误信息显示在这里，没有的时候隐藏.</label>
+                    </div>
+                </td>
+            </tr>
+
+            <tr>
+                <td colspan="2" align="center">
+                    <input type="button" class="ipt_btn bradius3 bblue" id="add_major_btn" value="提交"/>
+                    <a class="cancel">放弃</a>
+                </td>
+            </tr>
+        </table>
+    </form>
+
+</div>
+
+
+<div class="dialog_box" id="edit_major_dialog" style="display:none">
+    <div class="dl_title"><strong>编辑专业</strong>
+        <a href="javascript:void(0)" title="关闭窗口" class="close_btn" id="closeBtn_edit_major">&times;</a>
+    </div>
+    <form id="update_major_form">
+        <input type="hidden" th:value="@{/major/update}" id="update_major_url"/>
+        <table class="tab_box">
+            <tr>
+                <td colspan="2" id="error_msg_for_edit_major"></td>
+            </tr>
+            <tr>
+                <td class="font14" width="150" align="right">院系名称:</td>
+                <td>
+                    <select name="departmentId" id="edit_major_departmentId">
+                        <option th:each="department : ${departments}"
+                                th:value="${department.id}"
+                                th:text="${department.name}">Wireframe
+                        </option>
+                    </select>
+                </td>
+            </tr>
+            <tr>
+                <td class="font14" align="right">专业名称:</td>
+                <input type="hidden" class="ipt_text" id="edit_major_id" name="id"/>
+                <td>
+                    <input type="text" class="ipt_text" name="name" id="edit_major_name"/>
+
+                    <div class="err-wrap invisible"><label id="error" class="error font12 ">错误信息显示在这里，没有的时候隐藏.</label>
+                    </div>
+                </td>
+            </tr>
+
+            <tr>
+                <td colspan="2" align="center">
+                    <input type="button" class="ipt_btn bradius3 bblue" id="update_major_btn" value="提交"/>
+                    <a class="cancel">放弃</a>
+                </td>
+            </tr>
+        </table>
+    </form>
+
+</div>
+<div th:include="footer :: footer"></div>
+<script th:src="@{/js/jquery.validate.min.js}" type="text/javascript"></script>
+<script type="text/javascript" th:src="@{/js/easydialog.min.js}"></script>
+<script type="text/javascript">
+    $(document).ready(function () {
+        $('#closeBtn_edit_major, #closeBtn_add_major, .cancel').click(function () {
+            easyDialog.close();
+        });
+        $('#add').click(function () {
+            easyDialog.open({
+                container: 'add_major_dialog',
+                fixed: false
+            });
+        });
+
+        $('#add_major_btn').click(function () {
+            // 禁用按钮
+//                $(this).attr("disabled", "disabled");
+
+            var post_data = $('#add_major_form').serializeArray();
+            $.ajax({
+                url: $('#add_major_url').val(),
+                data: post_data,
+                type: 'POST',
+                success: function (data) {
+                    if (data.status === true) {
+                        $('#error_msg_for_add_major').html(data.msg);
+                        setTimeout(window.location.reload(), 1500);
+                    } else {
+                        $('#error_msg_for_add_major').html(data.errors[0].defaultMessage);
+                    }
+                }
+            });
+        });
+
+        $('.a_edit').click(function () {
+            var row = $(this).closest('tr');
+            var major_name = $(row).find('td:eq(2)').html();
+            var department_id = $(row).find('.department_id').val();
+            var edit_major_id = $(row).find('.major_id').val();
+
+            // 写入表单
+            $('#edit_major_id').val(edit_major_id);
+            $('#edit_major_name').val(major_name);
+            $('#edit_major_departmentId').val(department_id);
+            easyDialog.open({
+                container: 'edit_major_dialog',
+                fixed: false
+            });
+        });
+
+        $('#update_major_btn').click(function () {
+            // 禁用按钮
+//                $(this).attr("disabled", "disabled");
+
+            var post_data = $('#update_major_form').serializeArray();
+            $.ajax({
+                url: $('#update_major_url').val(),
+                data: post_data,
+                type: 'POST',
+                success: function (data) {
+                    if (data.status === true) {
+                        $('#error_msg_for_edit_major').html(data.msg);
+                        setTimeout(window.location.reload(), 1500);
+                    } else {
+                        $('#error_msg_for_edit_major').html(data.errors[0].defaultMessage);
+                    }
+                }
+            });
+        });
+        // 搜索
+        $('#search_btn').click(function () {
+            var search_key = $('#search_key').val();
+            if (search_key != "请选择...") {
+                window.location.href = $('#search_url').val() + '?search=' + encodeURI(encodeURI(search_key));
+            }
+            else {
+                window.location.href = $('#search_url').val();
+            }
+        });
+    });
+</script>
+</body>
+</html>

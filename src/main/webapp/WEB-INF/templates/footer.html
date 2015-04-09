@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<body>
+	<div th:fragment="footer">
+		<script th:src="@{/js/jquery.min.js}" src="../../resources/js/jquery.min.js" type="text/javascript"></script>
+		<!--左导航切换-->
+	    <script type="text/javascript">
+	        $(function () {
+	            $(".subNav").click(function () {
+	                $(this).toggleClass("currentDd").siblings(".subNav").removeClass("currentDd")
+	                $(this).toggleClass("currentDt").siblings(".subNav").removeClass("currentDt")
+	                $(this).next(".navContent").slideToggle(300).siblings(".navContent").slideUp(500)
+	            });
+	            $(".navContent li").click(function () {
+	                $(".navContent li ").removeClass("current");
+	                $(this).addClass("current");
+	            });
+	            
+	            // 设置导航的显示
+	            var currentNav = $('#current_nav').val();
+	            if(currentNav) {
+	            	 // top bar
+		            var top_menu = '.' + currentNav.split(':')[0];
+		            $('.top_menu').find('li').removeClass('current').end().find(top_menu).addClass('current');
+		            
+		            // side bar
+		            var side_menu_summary = '.' + currentNav.split(':')[1];
+		            var side_menu_item = '.' + currentNav.split(':')[2];
+		        	$('.subNav').removeClass('currentDd').removeClass('currentDt');
+		        	$('.navContent').css('display', 'none');
+		        	$('.subNavBox').find('.subNav' + side_menu_summary).addClass('currentDd').addClass('currentDt').next('.navContent').css('display', 'block');
+		        	$('.navContent li').removeClass('current').parent().find('li' + side_menu_item).addClass('current');
+	            } else {
+	            	$('.subNav').removeClass('currentDd').removeClass('currentDt');
+	            	$('.navContent').css('display', 'none');
+	            }
+	           
+	        })
+    	</script>
+	</div>
+</body>
+</html>

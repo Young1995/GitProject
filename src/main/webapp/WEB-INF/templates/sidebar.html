@@ -1,0 +1,125 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<body>
+<div th:fragment="home_sidebar">
+    <div class="left ">
+        <div class="user_wrap">
+            <img class="user_pic fl" th:src="@{/__${#authentication.principal.userProfile == null ? 'css/images/user1.jpg' : #authentication.principal.userProfile.storePath}__}"
+                 src="../../resources/css/images/user1.jpg"/>
+
+            <div class="xx_wrap fl">
+                <p class="u_name" th:text="${#authentication.principal.name}">用户名</p>
+
+                <p>
+                    身份：<span class="u_role" th:text="${#authentication.principal.type}">教师</span>
+                </p>
+
+                <div class="iconbox">
+                    <a title="设置" th:href="@{/user/getProfile}"><i class="set db fl"></i></a> <a title="密码设置"
+                                                                                                 th:href="@{/user/change_password}"><i
+                        class="psw db fl"></i></a> <a title="个人消息"><i class="msg db fl"></i><span
+                        class="msgNum">(1)</span></a>
+
+                </div>
+            </div>
+        </div>
+         <div class="subNavBox">
+        	<div class="subNav currentDd currentDt"><i class="i_arrows "></i>我的课程站点</div>
+            <ul class="navContent " style="display:block">
+                	<li ><a href="#">大学英语一<i class="i_trangle db fr"></i></a></li>
+                    <li><a href="#">计算机基础<i class="i_trangle db fr"></i></a></li>
+                    <li><a href="#">思想政治<i class="i_trangle db fr"></i></a></li>
+            </ul>
+        </div>
+    </div>
+</div>
+<div th:fragment="index_sidebar">
+    <div class="left ">
+        <div class="user_wrap">
+            <img class="user_pic fl" th:src="@{/__${#authentication.principal.userProfile == null ? 'css/images/user1.jpg' : #authentication.principal.userProfile.storePath}__}"
+                 src="../../resources/css/images/user1.jpg"/>
+
+            <div class="xx_wrap fl">
+                <p class="u_name" th:text="${#authentication.principal.name}">用户名</p>
+
+                <p>
+                    身份：<span class="u_role" th:text="${#authentication.principal.type}">教师</span>
+                </p>
+
+                <div class="iconbox">
+                    <a title="设置" th:href="@{/user/getProfile}"><i class="set db fl"></i></a> <a title="密码设置"
+                                                                                                 th:href="@{/user/change_password}"><i
+                        class="psw db fl"></i></a> <a title="个人消息"><i class="msg db fl"></i><span
+                        class="msgNum">(1)</span></a>
+
+                </div>
+            </div>
+        </div>
+        <div class="subNavBox">
+            <div class="subNav currentDd currentDt usermanagement">
+                <i class="i_arrows "></i>用户管理
+            </div>
+            <ul class="navContent" style="display: block">
+                <li class="current user"><a th:href="@{/user_manage/list}">用户管理<i
+                        class="i_trangle db fr"></i></a></li>
+                <li class="role"><a th:href="@{/role/list}">角色管理<i class="i_trangle db fr"></i></a></li>
+            </ul>
+            <div class="subNav departmentsetting">
+                <i class="i_arrows"></i>院系/班级设置
+            </div>
+            <ul class="navContent">
+                <li class="department"><a href="#" th:href="@{/department/list}">院系管理<i class="i_trangle db fr"></i></a></li>
+                <li class="departmentmaster"><a href="#" th:href="@{/teacher/list}">院系负责人管理<i class="i_trangle db fr"></i></a></li>
+                <li class="major"><a href="#" th:href="@{/major/list}">专业管理<i class="i_trangle db fr"></i></a></li>
+                <li class="class"><a href="#" th:href="@{/class/list}">班级管理<i class="i_trangle db fr"></i></a></li>
+            </ul>
+        </div>
+    </div>
+</div>
+
+<!-- online_platform_sidebar -->
+<div th:fragment="tech_manage_sidebar">
+    <div class="left ">
+        <div class="user_wrap">
+            <img class="user_pic fl" th:src="@{/__${#authentication.principal.userProfile == null ? 'css/images/user1.jpg' : #authentication.principal.userProfile.storePath}__}"
+                 src="../../resources/css/images/user1.jpg"/>
+
+            <div class="xx_wrap fl">
+                <p class="u_name" th:text="${#authentication.principal.name}">用户名</p>
+
+                <p>
+                    身份：<span class="u_role" th:text="${#authentication.principal.type}">教师</span>
+                </p>
+
+                <div class="iconbox">
+                    <a title="设置" th:href="@{/user/getProfile}"><i class="set db fl"></i></a> <a title="密码设置"
+                                                                                                 th:href="@{/user/change_password}"><i
+                        class="psw db fl"></i></a> <a title="个人消息"><i class="msg db fl"></i><span
+                        class="msgNum">(1)</span></a>
+
+                </div>
+            </div>
+        </div>
+         <div class="subNavBox">
+        	<div class="subNav task" sec:authorize="hasAnyRole('ROLE_ADMIN','ROLE_DEPARTMENT')"><i class="i_arrows "></i>工作管理</div>
+            <ul class="navContent" style="display:block" sec:authorize="hasAnyRole('ROLE_ADMIN','ROLE_DEPARTMENT')">
+                	<li class="pub"><a th:href="@{/task}">工作任务发布<i class="i_trangle db fr"></i></a></li>
+                	<li class="execute"><a th:href="@{/task/execute}">工作任务执行<i class="i_trangle db fr"></i></a></li>
+                	<li class="exam"><a th:href="@{/task/exam}">工作任务考核<i class="i_trangle db fr"></i></a></li>
+            </ul>
+            <div class="subNav attendance"><i class="i_arrows "></i>学业管理</div>
+            <ul class="navContent" style="display:block">
+                	<li class="setting" sec:authorize="hasAnyRole('ROLE_ADMIN')"><a th:href="@{/attend/setting}">考勤设置<i class="i_trangle db fr"></i></a></li>
+                	<li class="teacher_check" sec:authorize="hasAnyRole('ROLE_TEACHER')"><a th:href="@{/attend/teacher}">教师考勤<i class="i_trangle db fr"></i></a></li>
+                	<li class="class_check" sec:authorize="hasAnyRole('ROLE_CLASS_MONITOR')"><a th:href="@{/attend/class}">班级考勤<i class="i_trangle db fr"></i></a></li>
+                	<li class="student_check" sec:authorize="hasAnyRole('ROLE_STUDENT')"><a th:href="@{/attend/student}">学生考勤<i class="i_trangle db fr"></i></a></li>
+            </ul>
+            <div class="subNav statistic" sec:authorize="hasAnyRole('ROLE_ADMIN')"><i class="i_arrows "></i>工作报表</div>
+            <ul class="navContent" style="display:block" sec:authorize="hasAnyRole('ROLE_ADMIN')">
+                	<li class="attend_statistic" sec:authorize="hasAnyRole('ROLE_ADMIN')"><a th:href="@{/attend/statistic}">考勤统计<i class="i_trangle db fr"></i></a></li>
+            </ul>
+        </div>
+    </div>
+</div>
+</body>
+</html>

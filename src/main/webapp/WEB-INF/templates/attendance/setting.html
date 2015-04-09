@@ -1,0 +1,346 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head th:substituteby="header :: header">
+</head>
+<head>
+<title>四川交通职业技术学院-考勤设置</title>
+<style type="text/css" >
+#add,#search { width:150px; height:35px; font-weight:bold;}
+.depart { width:230px !important;}
+.tab_box { width:90%; margin:20px auto; color:#666 }
+.tab_box td { padding:10px 5px;}
+.tab_box .ipt_text { width:220px !important;}
+.tab_box .ipt_btn{ width:80px !important;}
+.tab_box .error { width:230px !important;}
+.tab_box label { font-size:14px;}
+a.next,a.pre { padding:2px 5px; color:#fff;}
+.ke-container { width:480px !important;}
+.editBox { width:750px;}
+.viewBox { width:1000px;}
+.view:hover { color:#F00; text-decoration:underline;}
+
+.green {color: green !important;}
+.red {color: red !important;}
+.pdiv {width: 100%;height: 500px;overflow: auto;}
+.txtlal {margin-bottom: 15px; }
+.tb_operation {color: #666;}
+</style>
+</head>
+<body>
+	<input type="hidden" id="current_nav" value="tech_manage:attendance:setting"/>
+	<div th:include="topbar :: topbar"></div>
+	<div th:include="sidebar :: tech_manage_sidebar"></div>
+	<!--右侧框架，内容区-->
+
+<!--右侧框架，内容区-->
+	<div class="content">   
+        <!---->
+        <div class="changePsw">
+        	<div class="head2Box"><i class="i_q db fl"></i><h2 class="head2">考勤设置</h2></div>
+            <div class="form">
+            	 <form name="attend_check_student" th:action="@{/attend/setting}" method="POST">
+                    <table class="tb_xx" th:object="${studentSetting}">
+                        <tr>
+                            <td width="50">序号</td>
+                            <td>考勤项目</td>
+                            <td>是否显示?</td>
+                        </tr>
+                        <tr>
+                            <td colspan="3">学生考勤项</td>
+                        </tr>
+                        <tr>
+                            <td>1</td>
+                            <td><label for="displayCourseName">课程名称</label></td>
+                            <td th:if="*{displayCourseName}">
+                                <input type="radio" name="displayCourseName" th:value="1" class="ipt_radio" checked="checked"/><label for="displayCourseName">显示</label> &nbsp;&nbsp;&nbsp;
+                                <input type="radio" name="displayCourseName" value="0" class="ipt_radio" /><label for="displayCourseName">不显示</label> &nbsp;&nbsp;&nbsp;
+                            </td>
+                            <td th:if="*{!displayCourseName}">
+                                <input type="radio" name="displayCourseName" th:value="1" class="ipt_radio"/><label for="displayCourseName">显示</label> &nbsp;&nbsp;&nbsp;
+                                <input type="radio" name="displayCourseName" value="0" class="ipt_radio"  checked="checked"/><label for="displayCourseName">不显示</label> &nbsp;&nbsp;&nbsp;
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>2</td>
+                            <td><label for="displayBeginTime">上课时间</label></td>
+                            <td th:if="*{displayBeginTime}">
+                                <input type="radio" name="displayBeginTime" value="1" class="ipt_radio" checked="checked" /><label for="displayCourseName">显示</label> &nbsp;&nbsp;&nbsp;
+                                <input type="radio" name="displayBeginTime" value="0" class="ipt_radio"/><label for="displayCourseName">不显示</label> &nbsp;&nbsp;&nbsp;
+                            </td>
+                            <td th:if="*{!displayBeginTime}">
+                                <input type="radio" name="displayBeginTime" value="1" class="ipt_radio" /><label for="displayCourseName">显示</label> &nbsp;&nbsp;&nbsp;
+                                <input type="radio" name="displayBeginTime" value="0" class="ipt_radio" checked="checked" /><label for="displayCourseName">不显示</label> &nbsp;&nbsp;&nbsp;
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>3</td>
+                            <td><label for="displayEndTime">下课时间</label></td>
+                            <td th:if="*{displayEndTime}">
+                                <input type="radio" name="displayEndTime" value="1" class="ipt_radio" checked="checked" /><label for="displayCourseName">显示</label> &nbsp;&nbsp;&nbsp;
+                                <input type="radio" name="displayEndTime" value="0" class="ipt_radio"/><label for="displayCourseName">不显示</label> &nbsp;&nbsp;&nbsp;
+                            </td>
+                            <td th:if="*{!displayEndTime}">
+                                <input type="radio" name="displayEndTime" value="1" class="ipt_radio"/><label for="displayCourseName">显示</label> &nbsp;&nbsp;&nbsp;
+                                <input type="radio" name="displayEndTime" value="0" class="ipt_radio" checked="checked"/><label for="displayCourseName">不显示</label> &nbsp;&nbsp;&nbsp;
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>4</td>
+                            <td><label for="displayCourseName">上课地点</label></td>
+                            <td th:if="*{displayClassRoom}">
+                                <input type="radio" name="displayClassRoom" value="1" class="ipt_radio" checked="checked" /><label for="displayCourseName">显示</label> &nbsp;&nbsp;&nbsp;
+                                <input type="radio" name="displayClassRoom" value="0" class="ipt_radio"/><label for="displayCourseName">不显示</label> &nbsp;&nbsp;&nbsp;
+                            </td>
+                            <td th:if="*{!displayClassRoom}">
+                                <input type="radio" name="displayClassRoom" value="1" class="ipt_radio"/><label for="displayCourseName">显示</label> &nbsp;&nbsp;&nbsp;
+                                <input type="radio" name="displayClassRoom" value="0" class="ipt_radio" checked="checked" /><label for="displayCourseName">不显示</label> &nbsp;&nbsp;&nbsp;
+                            </td>
+                        </tr>
+                        <tr>
+                            <td colspan="3" align="center">
+                            	<input type="hidden" th:value="*{id}" name="id"/>
+                            	<input type="hidden" value="3" name="type"/>
+                                <input type="submit" class="ipt_btn bradius3 bblue" id="edit_closeBtn" value="提交" />
+                                <a class="cancel" id="edit_closeBtn">放弃</a>
+                            </td>
+                        </tr>
+                    </table>
+                </form>
+            </div>
+            <div class="clear">
+            </div>
+            <div class="form">
+            	 <form name="attend_check_teacher" th:action="@{/attend/setting}" method="POST">
+                    <table class="tb_xx" th:object="${teacherSetting}">
+                        <tr>
+                            <td colspan="3">教师考勤项</td>
+                        </tr>
+                        <tr>
+                            <td>1</td>
+                            <td><label for="displayCourseName">课程名称</label></td>
+                            <td th:if="*{displayCourseName}">
+                                <input type="radio" name="displayCourseName" th:value="1" class="ipt_radio" checked="checked"/><label for="displayCourseName">显示</label> &nbsp;&nbsp;&nbsp;
+                                <input type="radio" name="displayCourseName" value="0" class="ipt_radio" /><label for="displayCourseName">不显示</label> &nbsp;&nbsp;&nbsp;
+                            </td>
+                            <td th:if="*{!displayCourseName}">
+                                <input type="radio" name="displayCourseName" th:value="1" class="ipt_radio"/><label for="displayCourseName">显示</label> &nbsp;&nbsp;&nbsp;
+                                <input type="radio" name="displayCourseName" value="0" class="ipt_radio"  checked="checked"/><label for="displayCourseName">不显示</label> &nbsp;&nbsp;&nbsp;
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>2</td>
+                            <td><label for="displayBeginTime">上课时间</label></td>
+                            <td th:if="*{displayBeginTime}">
+                                <input type="radio" name="displayBeginTime" value="1" class="ipt_radio" checked="checked" /><label for="displayCourseName">显示</label> &nbsp;&nbsp;&nbsp;
+                                <input type="radio" name="displayBeginTime" value="0" class="ipt_radio"/><label for="displayCourseName">不显示</label> &nbsp;&nbsp;&nbsp;
+                            </td>
+                            <td th:if="*{!displayBeginTime}">
+                                <input type="radio" name="displayBeginTime" value="1" class="ipt_radio" /><label for="displayCourseName">显示</label> &nbsp;&nbsp;&nbsp;
+                                <input type="radio" name="displayBeginTime" value="0" class="ipt_radio" checked="checked" /><label for="displayCourseName">不显示</label> &nbsp;&nbsp;&nbsp;
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>3</td>
+                            <td><label for="displayEndTime">下课时间</label></td>
+                            <td th:if="*{displayEndTime}">
+                                <input type="radio" name="displayEndTime" value="1" class="ipt_radio" checked="checked" /><label for="displayCourseName">显示</label> &nbsp;&nbsp;&nbsp;
+                                <input type="radio" name="displayEndTime" value="0" class="ipt_radio"/><label for="displayCourseName">不显示</label> &nbsp;&nbsp;&nbsp;
+                            </td>
+                            <td th:if="*{!displayEndTime}">
+                                <input type="radio" name="displayEndTime" value="1" class="ipt_radio"/><label for="displayCourseName">显示</label> &nbsp;&nbsp;&nbsp;
+                                <input type="radio" name="displayEndTime" value="0" class="ipt_radio" checked="checked"/><label for="displayCourseName">不显示</label> &nbsp;&nbsp;&nbsp;
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>4</td>
+                            <td><label for="displayCourseName">上课地点</label></td>
+                            <td th:if="*{displayClassRoom}">
+                                <input type="radio" name="displayClassRoom" value="1" class="ipt_radio" checked="checked" /><label for="displayCourseName">显示</label> &nbsp;&nbsp;&nbsp;
+                                <input type="radio" name="displayClassRoom" value="0" class="ipt_radio"/><label for="displayCourseName">不显示</label> &nbsp;&nbsp;&nbsp;
+                            </td>
+                            <td th:if="*{!displayClassRoom}">
+                                <input type="radio" name="displayClassRoom" value="1" class="ipt_radio"/><label for="displayCourseName">显示</label> &nbsp;&nbsp;&nbsp;
+                                <input type="radio" name="displayClassRoom" value="0" class="ipt_radio" checked="checked" /><label for="displayCourseName">不显示</label> &nbsp;&nbsp;&nbsp;
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>5</td>
+                            <td><label for="displayTotalStudent">应到人数</label></td>
+                            <td th:if="*{displayTotalStudent}">
+                                <input type="radio" name="displayTotalStudent" value="1" class="ipt_radio" checked="checked" /><label for="displayCourseName">显示</label> &nbsp;&nbsp;&nbsp;
+                                <input type="radio" name="displayTotalStudent" value="0" class="ipt_radio"/><label for="displayTotalStudent">不显示</label> &nbsp;&nbsp;&nbsp;
+                            </td>
+                            <td th:if="*{!displayTotalStudent}">
+                                <input type="radio" name="displayTotalStudent" value="1" class="ipt_radio"/><label for="displayCourseName">显示</label> &nbsp;&nbsp;&nbsp;
+                                <input type="radio" name="displayTotalStudent" value="0" class="ipt_radio" checked="checked" /><label for="displayCourseName">不显示</label> &nbsp;&nbsp;&nbsp;
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>5</td>
+                            <td><label for="displayTotalStudent">实到人数</label></td>
+                            <td th:if="*{displayActualStudent}">
+                                <input type="radio" name="displayActualStudent" value="1" class="ipt_radio" checked="checked" /><label for="displayCourseName">显示</label> &nbsp;&nbsp;&nbsp;
+                                <input type="radio" name="displayActualStudent" value="0" class="ipt_radio"/><label for="displayTotalStudent">不显示</label> &nbsp;&nbsp;&nbsp;
+                            </td>
+                            <td th:if="*{!displayActualStudent}">
+                                <input type="radio" name="displayActualStudent" value="1" class="ipt_radio"/><label for="displayCourseName">显示</label> &nbsp;&nbsp;&nbsp;
+                                <input type="radio" name="displayActualStudent" value="0" class="ipt_radio" checked="checked" /><label for="displayCourseName">不显示</label> &nbsp;&nbsp;&nbsp;
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>5</td>
+                            <td><label for="displayLateStudent">迟到人数</label></td>
+                            <td th:if="*{displayLateStudent}">
+                                <input type="radio" name="displayLateStudent" value="1" class="ipt_radio" checked="checked" /><label for="displayCourseName">显示</label> &nbsp;&nbsp;&nbsp;
+                                <input type="radio" name="displayLateStudent" value="0" class="ipt_radio"/><label for="displayTotalStudent">不显示</label> &nbsp;&nbsp;&nbsp;
+                            </td>
+                            <td th:if="*{!displayLateStudent}">
+                                <input type="radio" name="displayLateStudent" value="1" class="ipt_radio"/><label for="displayCourseName">显示</label> &nbsp;&nbsp;&nbsp;
+                                <input type="radio" name="displayLateStudent" value="0" class="ipt_radio" checked="checked" /><label for="displayCourseName">不显示</label> &nbsp;&nbsp;&nbsp;
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>5</td>
+                            <td><label for="displayAbsentStudent">早退人数</label></td>
+                            <td th:if="*{displayAbsentStudent}">
+                                <input type="radio" name="displayAbsentStudent" value="1" class="ipt_radio" checked="checked" /><label for="displayCourseName">显示</label> &nbsp;&nbsp;&nbsp;
+                                <input type="radio" name="displayAbsentStudent" value="0" class="ipt_radio"/><label for="displayTotalStudent">不显示</label> &nbsp;&nbsp;&nbsp;
+                            </td>
+                            <td th:if="*{!displayAbsentStudent}">
+                                <input type="radio" name="displayAbsentStudent" value="1" class="ipt_radio"/><label for="displayCourseName">显示</label> &nbsp;&nbsp;&nbsp;
+                                <input type="radio" name="displayAbsentStudent" value="0" class="ipt_radio" checked="checked" /><label for="displayCourseName">不显示</label> &nbsp;&nbsp;&nbsp;
+                            </td>
+                        </tr>
+                        <tr>
+                            <td colspan="3" align="center">
+                            	<input type="hidden" th:value="*{id}" name="id"/>
+                            	<input type="hidden" value="1" name="type"/>
+                                <input type="submit" class="ipt_btn bradius3 bblue" id="edit_closeBtn" value="提交" />
+                                <a class="cancel" id="edit_closeBtn">放弃</a>
+                            </td>
+                        </tr>
+                    </table>
+                </form>
+            </div>
+            <div class="clear">
+            </div>
+            <div class="form">
+            	 <form name="attend_check_class" th:action="@{/attend/setting}" method="POST">
+                    <table class="tb_xx" th:object="${classSetting}">
+                        <tr>
+                            <td colspan="3">教师考勤项</td>
+                        </tr>
+                        <tr>
+                            <td>1</td>
+                            <td><label for="displayCourseName">课程名称</label></td>
+                            <td th:if="*{displayCourseName}">
+                                <input type="radio" name="displayCourseName" th:value="1" class="ipt_radio" checked="checked"/><label for="displayCourseName">显示</label> &nbsp;&nbsp;&nbsp;
+                                <input type="radio" name="displayCourseName" value="0" class="ipt_radio" /><label for="displayCourseName">不显示</label> &nbsp;&nbsp;&nbsp;
+                            </td>
+                            <td th:if="*{!displayCourseName}">
+                                <input type="radio" name="displayCourseName" th:value="1" class="ipt_radio"/><label for="displayCourseName">显示</label> &nbsp;&nbsp;&nbsp;
+                                <input type="radio" name="displayCourseName" value="0" class="ipt_radio"  checked="checked"/><label for="displayCourseName">不显示</label> &nbsp;&nbsp;&nbsp;
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>2</td>
+                            <td><label for="displayBeginTime">上课时间</label></td>
+                            <td th:if="*{displayBeginTime}">
+                                <input type="radio" name="displayBeginTime" value="1" class="ipt_radio" checked="checked" /><label for="displayCourseName">显示</label> &nbsp;&nbsp;&nbsp;
+                                <input type="radio" name="displayBeginTime" value="0" class="ipt_radio"/><label for="displayCourseName">不显示</label> &nbsp;&nbsp;&nbsp;
+                            </td>
+                            <td th:if="*{!displayBeginTime}">
+                                <input type="radio" name="displayBeginTime" value="1" class="ipt_radio" /><label for="displayCourseName">显示</label> &nbsp;&nbsp;&nbsp;
+                                <input type="radio" name="displayBeginTime" value="0" class="ipt_radio" checked="checked" /><label for="displayCourseName">不显示</label> &nbsp;&nbsp;&nbsp;
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>3</td>
+                            <td><label for="displayEndTime">下课时间</label></td>
+                            <td th:if="*{displayEndTime}">
+                                <input type="radio" name="displayEndTime" value="1" class="ipt_radio" checked="checked" /><label for="displayCourseName">显示</label> &nbsp;&nbsp;&nbsp;
+                                <input type="radio" name="displayEndTime" value="0" class="ipt_radio"/><label for="displayCourseName">不显示</label> &nbsp;&nbsp;&nbsp;
+                            </td>
+                            <td th:if="*{!displayEndTime}">
+                                <input type="radio" name="displayEndTime" value="1" class="ipt_radio"/><label for="displayCourseName">显示</label> &nbsp;&nbsp;&nbsp;
+                                <input type="radio" name="displayEndTime" value="0" class="ipt_radio" checked="checked"/><label for="displayCourseName">不显示</label> &nbsp;&nbsp;&nbsp;
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>4</td>
+                            <td><label for="displayCourseName">上课地点</label></td>
+                            <td th:if="*{displayClassRoom}">
+                                <input type="radio" name="displayClassRoom" value="1" class="ipt_radio" checked="checked" /><label for="displayCourseName">显示</label> &nbsp;&nbsp;&nbsp;
+                                <input type="radio" name="displayClassRoom" value="0" class="ipt_radio"/><label for="displayCourseName">不显示</label> &nbsp;&nbsp;&nbsp;
+                            </td>
+                            <td th:if="*{!displayClassRoom}">
+                                <input type="radio" name="displayClassRoom" value="1" class="ipt_radio"/><label for="displayCourseName">显示</label> &nbsp;&nbsp;&nbsp;
+                                <input type="radio" name="displayClassRoom" value="0" class="ipt_radio" checked="checked" /><label for="displayCourseName">不显示</label> &nbsp;&nbsp;&nbsp;
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>5</td>
+                            <td><label for="displayTotalStudent">应到人数</label></td>
+                            <td th:if="*{displayTotalStudent}">
+                                <input type="radio" name="displayTotalStudent" value="1" class="ipt_radio" checked="checked" /><label for="displayCourseName">显示</label> &nbsp;&nbsp;&nbsp;
+                                <input type="radio" name="displayTotalStudent" value="0" class="ipt_radio"/><label for="displayTotalStudent">不显示</label> &nbsp;&nbsp;&nbsp;
+                            </td>
+                            <td th:if="*{!displayTotalStudent}">
+                                <input type="radio" name="displayTotalStudent" value="1" class="ipt_radio"/><label for="displayCourseName">显示</label> &nbsp;&nbsp;&nbsp;
+                                <input type="radio" name="displayTotalStudent" value="0" class="ipt_radio" checked="checked" /><label for="displayCourseName">不显示</label> &nbsp;&nbsp;&nbsp;
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>5</td>
+                            <td><label for="displayTotalStudent">实到人数</label></td>
+                            <td th:if="*{displayActualStudent}">
+                                <input type="radio" name="displayActualStudent" value="1" class="ipt_radio" checked="checked" /><label for="displayCourseName">显示</label> &nbsp;&nbsp;&nbsp;
+                                <input type="radio" name="displayActualStudent" value="0" class="ipt_radio"/><label for="displayTotalStudent">不显示</label> &nbsp;&nbsp;&nbsp;
+                            </td>
+                            <td th:if="*{!displayActualStudent}">
+                                <input type="radio" name="displayActualStudent" value="1" class="ipt_radio"/><label for="displayCourseName">显示</label> &nbsp;&nbsp;&nbsp;
+                                <input type="radio" name="displayActualStudent" value="0" class="ipt_radio" checked="checked" /><label for="displayCourseName">不显示</label> &nbsp;&nbsp;&nbsp;
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>5</td>
+                            <td><label for="displayLateStudent">迟到人数</label></td>
+                            <td th:if="*{displayLateStudent}">
+                                <input type="radio" name="displayLateStudent" value="1" class="ipt_radio" checked="checked" /><label for="displayCourseName">显示</label> &nbsp;&nbsp;&nbsp;
+                                <input type="radio" name="displayLateStudent" value="0" class="ipt_radio"/><label for="displayTotalStudent">不显示</label> &nbsp;&nbsp;&nbsp;
+                            </td>
+                            <td th:if="*{!displayLateStudent}">
+                                <input type="radio" name="displayLateStudent" value="1" class="ipt_radio"/><label for="displayCourseName">显示</label> &nbsp;&nbsp;&nbsp;
+                                <input type="radio" name="displayLateStudent" value="0" class="ipt_radio" checked="checked" /><label for="displayCourseName">不显示</label> &nbsp;&nbsp;&nbsp;
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>5</td>
+                            <td><label for="displayAbsentStudent">早退人数</label></td>
+                            <td th:if="*{displayAbsentStudent}">
+                                <input type="radio" name="displayAbsentStudent" value="1" class="ipt_radio" checked="checked" /><label for="displayCourseName">显示</label> &nbsp;&nbsp;&nbsp;
+                                <input type="radio" name="displayAbsentStudent" value="0" class="ipt_radio"/><label for="displayTotalStudent">不显示</label> &nbsp;&nbsp;&nbsp;
+                            </td>
+                            <td th:if="*{!displayAbsentStudent}">
+                                <input type="radio" name="displayAbsentStudent" value="1" class="ipt_radio"/><label for="displayCourseName">显示</label> &nbsp;&nbsp;&nbsp;
+                                <input type="radio" name="displayAbsentStudent" value="0" class="ipt_radio" checked="checked" /><label for="displayCourseName">不显示</label> &nbsp;&nbsp;&nbsp;
+                            </td>
+                        </tr>
+                        <tr>
+                            <td colspan="3" align="center">
+                            	<input type="hidden" th:value="*{id}" name="id"/>
+                            	<input type="hidden" value="2" name="type"/>
+                                <input type="submit" class="ipt_btn bradius3 bblue" id="edit_closeBtn" value="提交" />
+                                <a class="cancel" id="edit_closeBtn">放弃</a>
+                            </td>
+                        </tr>
+                    </table>
+                </form>
+            </div>
+            <div class="clear">
+            </div>
+        </div>
+    </div>
+	<div th:include="footer :: footer"></div>
+</body>
+</html>

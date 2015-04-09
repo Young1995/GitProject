@@ -1,0 +1,11 @@
+@charset "utf-8";
+/* CSS Document */
+label { color:#4d4d4d;}
+.form { text-align:center;}
+.tb_form { margin-top:50px;border-color:#666;}
+.tb_form td { padding:10px 5px; border-color:#dedede; }
+.myPic{ padding:50px 0px !important;}
+.tb_form .pic { width:140px; width:140px; margin:20px 0;}
+.ipt_text,.ipt_menu { border-color:#979797;}
+a.delete { margin-left:10px;}
+.tb_form .ke-container{ margin:10px 0;}

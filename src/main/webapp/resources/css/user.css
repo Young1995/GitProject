@@ -1,0 +1,20 @@
+@charset "utf-8";
+/* CSS Document */
+
+#add { width:150px; height:35px; font-weight:bold;}
+.tab_box { width:100%; margin:0px auto; color:#666 }
+.tab_box td { padding:10px 5px; }
+.tab_box .tj{ width:80px !important;}
+.tab_box .error { width:230px !important;}
+.tab_box label { font-size:14px;}
+.btn { width:160px;}
+.txt { width:150px; height:30px;}
+.box { width:100%;}
+.box .tab_menu{  height:40px; overflow:hidden; background:#f0f0f0; text-align:center; }
+.tab_menu li {  height:38px;  line-height:38px; background:#f0f0f0; color:#666; padding:0 15px; border:1px solid #FFF; cursor:pointer; display:inline-block;*display:inline;*zoom:0; margin:0;  }
+.tab_menu li.current { border-top:3px solid #21b4ae; color:#13a49e; font-weight:bold}
+.box { border: 1px solid #CCC; text-align:center; }
+a.next,a.pre { padding:2px 5px; color:#fff;}
+.tab_box .ipt_text { width:230px; height:28px; font-size:12px;}
+.txt_excel{ width:180px !important;}
+.tab_box .ipt_menu { width:250px; font-size:14px;}

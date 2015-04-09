@@ -1,0 +1,305 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head th:substituteby="header :: header">
+</head>
+<head>
+<title>四川交通职业技术学院-工作任务发布</title>
+<style type="text/css" >
+#add,#search { width:150px; height:35px; font-weight:bold;}
+.depart { width:230px !important;}
+.tab_box { width:90%; margin:20px auto; color:#666 }
+.tab_box td { padding:10px 5px;}
+.tab_box .ipt_text { width:220px !important;}
+.tab_box .ipt_btn{ width:80px !important;}
+.tab_box .error { width:230px !important;}
+.tab_box label { font-size:14px;}
+a.next,a.pre { padding:2px 5px; color:#fff;}
+.ke-container { width:480px !important;}
+.editBox { width:750px;}
+.viewBox { width:1000px;}
+.view:hover { color:#F00; text-decoration:underline;}
+
+.green {
+	color: green !important;
+}
+.red {
+	color: red !important;
+}
+</style>
+<link rel="stylesheet" th:href="@{/css/default.css}" />
+<link rel="stylesheet" th:href="@{/css/jquery-ui.min.css}" />
+<script charset="utf-8" th:src="@{/js/kindeditor-min.js}"></script>
+<script charset="utf-8" th:src="@{/js/zh_CN.js}"></script>
+</head>
+<body>
+	<input type="hidden" id="current_nav" value="tech_manage:task:pub"/>
+	<div th:include="topbar :: topbar"></div>
+	<div th:include="sidebar :: tech_manage_sidebar"></div>
+	<!--右侧框架，内容区-->
+
+<!--右侧框架，内容区-->
+	<div class="content">   
+        <!---->
+        <div class="changePsw">
+        	<div class="head2Box"><i class="i_q db fl"></i><h2 class="head2">工作任务发布</h2></div>
+            <div class="form">
+            	<form name="changePsw">
+                  	<table class="tb_operation">
+                    	<tr class="tr_head"><td colspan="4">您可以执行以下操作：</td></tr>
+                    	<tr>
+                    		<td align="right">任务名称：</td>
+                            <td><input type="text" class="ipt_text search_name" /></td>
+                            <td align="left">
+                                <input type="button" class="ipt_btn bradius3 bblue search_btn" value="搜索" />
+                                <input type="hidden" id="search_url" th:value="@{/task}" />
+                            </td>
+                            <td align="center"><input type="button" class="ipt_btn bradius3 bred" value="发布任务" id="add"/></td>
+                    	</tr>
+                    </table>
+                    <table class="tb_xx">
+                    	<tr class="tb_head">
+                        	<th>No</th>
+                            <th>任务类型</th>
+                            <th>任务名称</th>
+                            <th>完成时间</th>
+                            <th>任务发布单位</th>
+                            <th>任务发布人</th>
+                            <th>任务发布时间</th>
+                            <th>查看详情</th>
+                            <th colspan="2" class="td_operation" style=" background:#333440;">操作</th>                           
+                        </tr>
+                        <tr th:each="task,iterationStatus : ${tasks.resultData}">
+                        	<td th:text="${iterationStatus.count}">01</td>
+                            <td th:text="${task.type == 1 ? '临时任务' : '常规任务'}">任务类型</td>
+                            <td th:text="${task.name}">任务名称</td>
+                            <td th:text="${task.finishDate == null ? '' : #dates.format(task.finishDate, 'yyyy-MM-dd')}">完成时间</td>
+                            <td th:text="${task.department.name}">发布单位</td>
+                            <td th:text="${task.pubUser}">发布人</td>
+                            <td th:text="${task.pubDate == null ? '' : #dates.format(task.pubDate, 'yyyy-MM-dd')}">发布时间</td>
+                            <td><a class="view view_btn">查看</a><input type="hidden" th:value="${task.id}"/></td>
+                            <td><div><i class="i_edt db fl"></i><a class="a_opr db fl a_edit" href="javascript:void(0)">修改</a><input type="hidden" th:value="${task.id}"/></div></td>
+                            <td><div><i class="i_del db fl"></i><a class="a_opr db fl a_delete">删除</a><input type="hidden" th:value="${task.id}"/></div></td>
+                        </tr>
+                        <tr>
+                        	<td colspan="10">
+                        	共 <span th:text="${tasks.totalCount}"/> 条记录 &nbsp;  第<span th:text="${tasks.currentPageNo}"/>/<span th:text="${tasks.totalPageCount}"/>页&nbsp; 
+	                             <a class="pre bradius3 bgreen" th:if="${tasks.previousPage}" th:href="@{/task?pageNo=__${tasks.currentPageNo - 1}__&amp;name=__${name}__}">上一页</a>
+	                             <a class="pre bradius3 bgreen" th:if="${!tasks.previousPage}">上一页</a>
+	                             <span th:each="pageNumber : ${tasks.pageNumbers}">
+	                             	<span th:if="${pageNumber == tasks.currentPageNo}">
+	                             		[<span class="" th:text="${pageNumber}"></span>]
+	                             	</span>
+	                             	<span th:if="${pageNumber != tasks.currentPageNo}">
+	                             		<a th:href="@{/task?pageNo=__${pageNumber}__&amp;name=__${name}__}" th:text="${pageNumber}"></a>
+	                             	</span>
+	                             </span>
+	                    		 &nbsp;
+	                    		 <a class="next bradius3 bgreen" th:if="${tasks.nextPage}" th:href="@{/task?pageNo=__${tasks.currentPageNo + 1}__&amp;name=__${name}__}">下一页</a>
+	                    		 <a class="next bradius3 bgreen" th:if="${!tasks.nextPage}">下一页</a>
+                        	</td>
+                        </tr>
+                    </table>
+                </form>
+            </div>
+            <div class="clear">
+            </div>
+        </div>
+    </div>
+  <!--弹出框-->
+
+  <div class="dialog_box editBox" id="edit_dialog" style="display:none">
+	<div class="dl_title"><strong>编辑工作任务</strong>
+    <a href="javascript:void(0)" title="关闭窗口" class="close_btn" id="closeBtn">&times;</a>
+    </div>
+    	<form id="operation_form">
+        <table class="tab_box">
+        	<tr>
+            	<td colspan="2" class="font14" id="op_msg" width="150" align="center" style="color:red;"></td>
+            </tr>
+        	<tr>
+            	<td class="font14" width="150" align="right">任务类型:</td>
+                <td>
+                	<select name="type" class="ipt_menu">
+                		<option value="1">临时任务</option>
+                		<option value="2">常规任务</option>
+                	</select>
+                </td>
+            </tr>
+        	<tr>
+            	<td class="font14" width="150" align="right">任务名称:</td>
+                <td>
+                	<input type="text" class="ipt_text name" name="name" style="width: 270px !important;"/>
+                	<div class="err-wrap"></div>
+                </td>
+            </tr>
+            <tr>
+            	<td class="font14" align="right">指定学院:</td>
+                <td>
+                	<select name="depId" class="department ipt_menu">
+                		<option th:each="dep : ${departments}" th:value="${dep.id}" th:text="${dep.name}">计算机学院</option>
+                	</select>
+                 	<div class="err-wrap"></div>
+                </td>
+            </tr>
+             <tr>
+            	<td class="font14" align="right">指定专业:</td>
+                <td>
+                	<select name="majorId" class="ipt_menu major">
+                		<option value="1">请选择适用专业</option>
+                	</select>
+                 	<div class="err-wrap"></div>
+                </td>
+            </tr>
+            <tr>
+            	<td class="font14" align="right">任务内容:</td>
+                <td>
+                	<textarea class="ipt_text content" name="content"></textarea>
+                	<input type="hidden" id="content_details"/>
+                 	<div class="err-wrap"></div>
+                </td>
+            </tr>
+            <tr>
+            	<td class="font14" align="right">注意事项:</td>
+                <td>
+                	<textarea class="ipt_text warning" name="warning"></textarea>
+                 	<div class="err-wrap"></div>
+                </td>
+            </tr>
+            <tr>
+            	<td class="font14" align="right">考核点:</td>
+                <td>
+                	<textarea class="ipt_text keyPoint" name="keyPoint"></textarea>
+                 	<div class="err-wrap"></div>
+                </td>
+            </tr>
+            <tr>
+            	<td class="font14" align="right">任务附件:</td>
+                <td>
+                	<span class="taskfilename"></span>
+                	<input type="file" name="taskfile" id="taskfile"/>
+                	<input type="hidden" name="taskFileName" id="taskFileName"/>
+                	<input type="hidden" name="taskFileURL" id="taskFileURL"/>
+                	<input type="hidden" id="upload_url" th:value="@{/task/upload}"/>
+                </td>
+            </tr>
+            <tr>
+            	<td class="font14" align="right">完成时间:</td>
+                <td>
+                	<input class="ipt_text finishDate" type="text" name="finishDate" />
+                 	<div class="err-wrap"></div>
+                </td>
+            </tr>
+            <tr>
+            	<td class="font14" align="right">发布时间:</td>
+                <td>
+                	<input class="ipt_text pubDate" type="text" name="pubDate" />
+                 	<div class="err-wrap"></div>
+                </td>
+            </tr>
+            <tr>
+            	<td colspan="2" align="center">
+                	<input type="button" class="ipt_btn bradius3 bblue add_or_update_btn" value="提交" />
+                	<input type="reset" value="重置" style="display:none;"/>
+                	<input type="hidden" name="id" id="op_id" value="0"/>
+                	<input type="hidden" id="add_or_edit_url" th:value="@{/task}"/>
+                	<input type="hidden" id="pre_update_url" th:value="@{/task}"/>
+                	<input type="hidden" id="load_major" th:value="@{/task/load_major}" />
+                	<input type="hidden" name="status" value="1"/>
+                	<input type="hidden" class="pubUser" name="pubUser"/>
+                    <a class="cancel">放弃</a>
+                </td>
+            </tr>
+        </table>
+   		</form>
+    
+    
+</div>
+
+<div class="dialog_box" id="delete_dialog" style="display:none">
+	<div class="dl_title"><strong>删除申请合作项目</strong>
+    <a href="javascript:void(0)" title="关闭窗口" class="close_btn" id="closeBtn">&times;</a>
+    </div>
+    <table class="tab_box">
+    <tr>
+    	<td colspan="2" align="center" class="red">确定删除该记录？</td>
+    </tr>
+    <tr>
+         <td colspan="2" align="center">
+          	<input type="button" class="ipt_btn bradius3 bblue delete_btn" value="提交" />
+          	<input type="hidden" id="delete_id"/>
+          	<input type="hidden" id="delete_url" th:value="@{/task/d}" />
+            <a class="cancel">放弃</a>
+         </td>
+    </tr>
+    </table>
+</div>
+
+  <div class="dialog_box" id="view_dialog" style="display:none; width: 700px;">
+	<div class="dl_title"><strong>工作任务详情</strong>
+    <a href="javascript:void(0)" title="关闭窗口" class="close_btn" id="closeBtn">&times;</a>
+    </div>
+        <table class="tab_box">
+          	<tr>
+            	<td class="font14" width="150" align="right">任务类型:</td>
+                <td>
+                	<span class="v_type"></span>
+                </td>
+            </tr>
+            <tr>
+            	<td class="font14" align="right">任务名称:</td>
+                <td>
+                	<span class="v_name"></span>
+                </td>
+            </tr>
+          	 <tr>
+            	<td class="font14" align="right">任务类容:</td>
+                <td>
+                	<span class="v_content"></span>
+                </td>
+            </tr>
+            <tr>
+            	<td class="font14" align="right">任务附件:</td>
+                <td>
+                	<a class="v_file_url"><span class="v_taskfile"></span></a>
+                </td>
+            </tr>
+            <tr>
+            	<td class="font14" align="right">注意事项:</td>
+                <td>
+                	<span class="v_warning"></span>
+                </td>
+            </tr>
+            <tr>
+            	<td class="font14" align="right">考核点:</td>
+                <td>
+                	<span class="v_keyPoint"></span>
+                </td>
+            </tr>
+            <tr>
+            	<td class="font14" align="right">完成时间:</td>
+                <td>
+                	<span class="v_finishDate"></span>
+                </td>
+            </tr>
+            <tr>
+            	<td class="font14" align="right">指定院系:</td>
+                <td>
+                	<span class="v_dep_major"></span>
+                </td>
+            </tr>
+            <tr>
+            	<td class="font14" align="right">发布时间:</td>
+                <td>
+                	<span class="v_pubDate"></span>
+                </td>
+            </tr>
+        </table>
+   		</div>
+	<div th:include="footer :: footer"></div>
+	<script th:src="@{/js/jquery.validate.min.js}" type="text/javascript"></script>
+	<script type="text/javascript" th:src="@{/js/jquery-ui.min.js}"></script>
+	<script type="text/javascript" th:src="@{/js/easydialog.min.js}"></script>
+	<script type="text/javascript" th:src="@{/js/ajaxfileupload.js}"></script>
+	<script type="text/javascript" th:src="@{/js/task/pub_task.js}"></script>
+</body>
+</html>

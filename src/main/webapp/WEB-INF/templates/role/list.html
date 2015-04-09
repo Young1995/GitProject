@@ -1,0 +1,124 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head th:substituteby="header :: header">
+</head>
+<head>
+<title>四川交通职业技术学院-角色列表</title>
+<link th:href="@{/css/home.css}" href="../../resources/css/main.css" rel="stylesheet" type="text/css"/>
+<style type="text/css" >
+#add { width:150px; height:35px; font-weight:bold;}
+.tab_box { width:90%; margin:20px auto; color:#666 }
+.tab_box td { padding:10px 5px;}
+.tab_box .ipt_text { width:230px !important;}
+.tab_box .ipt_btn{ width:80px !important;}
+.tab_box .error { width:230px !important;}
+.tab_box label { font-size:14px;}
+</style>
+</head>
+<body>
+	<input type="hidden" id="current_nav" value="index:usermanagement:role"/>
+	
+	<div th:include="topbar :: topbar"></div>
+	<div th:include="sidebar :: index_sidebar"></div>
+	<!--右侧框架，内容区-->
+	<div class="content">   
+        <!--修改密码-->
+        <div class="changePsw">
+        	<div class="head2Box"><i class="i_q db fl"></i><h2 class="head2">角色列表</h2></div>
+            <div class="form">
+            	<form name="changePsw">
+                  	<table class="tb_operation">
+                    	<tr class="tr_head"><td>您可以执行以下操作：</td></tr>
+                    	<tr><td align="center"><input type="button" class="ipt_btn bradius3 bred" value="添加角色" name="addUserGroup" id="add"/></td></tr>
+                    </table>
+                    <table class="tb_xx">
+                    	<tr class="tb_head">
+                        	<th>角色名称</th>
+                            <th>角色代码</th>
+                            <th>角色描述</th>
+                            <th colspan="2" class="td_operation" style=" background:#333440;">操作</th>
+                            
+                        </tr>
+                        <tr th:each="role : ${roles}">
+                        	<td th:text="${role.roleName}"></td>
+                            <td th:text="${role.roleCode}"></td>
+                            <td th:text="${role.roleDesc}"></td>
+                            <td>
+                            	<div><i class="i_edt db fl"></i><a class="a_opr db fl a_edit" href="javascript:void(0)">编辑</a></div>
+                            	<input type="hidden" class="role_id" th:value="${role.id}"/>
+                            </td>
+                            <td><div><i class="i_del db fl"></i><a class="a_opr db fl a_delete" th:href="@{/role/delete?id=__${role.id}__}">删除</a></div></td>
+                        </tr>
+                    </table>
+                </form>
+            </div>
+            <div class="clear">
+            </div>
+        </div>
+    </div>
+<!--弹出框-->
+
+  <div class="dialog_box" id="edit_dialog" style="display:none">
+	<div class="dl_title"><strong>编辑角色</strong>
+    <a href="javascript:void(0)" title="关闭窗口" class="close_btn">&times;</a>
+    </div>
+    	<form id="save_or_update_form">
+        <table class="tab_box">
+        	<tr>
+        		<td colspan="2" style="color:red; text-align:center;" id="op_msg"></td>
+        	</tr>
+        	<tr>
+            	<td class="font16" width="100" align="right">角色名称:</td>
+                <td>
+                <input type="text" class="role_name ipt_text" name="roleName" />
+                </td>
+            </tr>
+            <tr>
+            	<td class="font16" width="100" align="right">角色代码:</td>
+                <td>
+                <input type="text" class="role_code ipt_text" name="roleCode"/>
+                </td>
+            </tr>
+            <tr>
+            	<td class="font16" width="100" align="right">角色描述:</td>
+                <td>
+                <textarea cols="5" rows="5" class="role_desc ipt_text" name="roleDesc" style="height:100px !important;"></textarea>
+                </td>
+            </tr>
+            
+            <tr>
+            	<td colspan="2" align="center">
+            		<input type="hidden" class="role_id" name="id" value="0"/>
+                	<input type="button" class="ipt_btn bradius3 bblue" value="提交" id="save_or_update"/>
+                	<input type="reset" style="display:none;" id="reset_form"/>
+                    <a class="cancel">放弃</a>
+                </td>
+            </tr>
+        </table>
+        </form>
+        <input type="hidden" th:value="@{/role/addOrEdit}" id="add_or_edit_url"/>
+</div>
+
+ <div class="dialog_box" id="confirm_dialog" style="display:none">
+	<div class="dl_title"><strong>确定删除</strong>
+    <a href="javascript:void(0)" title="关闭窗口" class="close_btn">&times;</a>
+    </div>
+    <table class="tab_box">
+    	<tr>
+        	<td colspan="2" style="text-align:center;">确定要删除该条记录？</td>
+        </tr>
+         <tr>
+            <td colspan="2" align="center">
+            	<input type="hidden" class="role_id" name="id"/>
+                <input type="button" class="ipt_btn bradius3 bblue" value="提交" id="confirm_delete"/>
+                <a class="cancel">放弃</a>
+            </td>
+         </tr>
+    </table>
+    <input type="hidden" id="delete_url"/>
+</div>
+<div th:include="footer :: footer"></div>
+<script type="text/javascript" th:src="@{/js/easydialog.min.js}"></script>
+<script type="text/javascript" th:src="@{/js/users/role.js}"></script>
+</body>
+</html>

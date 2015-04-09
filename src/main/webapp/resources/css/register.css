@@ -1,0 +1,23 @@
+@charset "utf-8";
+/* CSS Document */
+body { background:#dedede;}
+
+.top { border-bottom:2px solid #CCC; padding:10px 0; background:#fff;}
+.content { background:#dedede;}
+.form_tab { width:100%; }
+.form_tab td{ height:40px; line-height:40px; padding:20px 5px; color:#666; font-size: 14px; vertical-align:middle; }
+
+
+.star { margin:0 5px;}
+.box{width:1000px;margin:10px auto 0;background:#fff;margin:50px 0;}
+.tab_box { background:#f7feff; border:1px solid #CCC; margin-top:-1px; }
+.tab_menu{overflow:hidden; background:#dedede; padding-left:320px;}
+.tab_menu li{width:150px;float:left;height:60px;line-height:60px;color:#fff;background:#07c6bb;text-align:center;cursor:pointer; margin-right:5px;}
+.tab_menu li.current{color:#666;background:#f7feff; border:1px solid #CCC; border-bottom:0px}
+.tab_menu li a{color:#fff;text-decoration:none;}
+.tab_menu li.current a{color:#333;}
+
+.content { height:100%;}
+.cont{ height:150px; background:#FFF; margin:100px auto; width:50%; border:2px solid #12D6CC; padding:50px 200px;}
+.gx { font-size:30px; line-height:80px; margin-left:20px}
+.zh { padding-left:100px;}

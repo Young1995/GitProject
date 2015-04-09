@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head th:substituteby="header :: header">
+</head>
+<head>
+<title>四川交通职业技术学院-考勤统计</title>
+<style type="text/css" >
+#add,#search { width:150px; height:35px; font-weight:bold;}
+.depart { width:230px !important;}
+.tab_box { width:90%; margin:20px auto; color:#666 }
+.tab_box td { padding:10px 5px;}
+.tab_box .ipt_text { width:220px !important;}
+.tab_box .ipt_btn{ width:80px !important;}
+.tab_box .error { width:230px !important;}
+.tab_box label { font-size:14px;}
+a.next,a.pre { padding:2px 5px; color:#fff;}
+.ke-container { width:480px !important;}
+.editBox { width:750px;}
+.viewBox { width:1000px;}
+.view:hover { color:#F00; text-decoration:underline;}
+
+.green {color: green !important;}
+.red {color: red !important;}
+.pdiv {width: 100%;height: 500px;overflow: auto;}
+.txtlal {margin-bottom: 15px; }
+.tb_operation {color: #666;}
+</style>
+</head>
+<body>
+	<input type="hidden" id="current_nav" value="tech_manage:statistic:attend_statistic"/>
+	<div th:include="topbar :: topbar"></div>
+	<div th:include="sidebar :: tech_manage_sidebar"></div>
+	<!--右侧框架，内容区-->
+
+<!--右侧框架，内容区-->
+	<div class="content">   
+        <!---->
+        <div class="changePsw">
+        	<div class="head2Box"><i class="i_q db fl"></i><h2 class="head2">考勤统计</h2></div>
+            <div class="form">
+            	<form name="changePsw">
+                    <table class="tb_xx">
+                        <tr class="tb_head">
+                            <th>No</th>
+                            <th>考勤班级</th>
+                            <th>考勤课程</th>
+                            <th>出勤率</th>
+                            <th>迟到次数</th>
+                            <th>早退次数</th> 
+                        </tr>
+                        <tr th:each="attend,iterationStatus : ${attends.resultData}">
+                            <td th:text="${iterationStatus.count}">01</td>
+                            <td th:text="${attend.course.className}">信息技术2013级1班</td>
+                            <td th:text="${attend.course.courseName}">市场营销</td>
+                            <td th:text="${attend.attendRate + '%'}">80%</td>
+                            <td th:text="${attend.lateStudent}">1</td>
+                            <td th:text="${attend.absentStudent}">0</td> 
+                        </tr>
+                        <tr>
+                        	<td colspan="6">
+                        		共 <span th:text="${attends.totalCount}"/> 条记录 &nbsp;  第<span th:text="${attends.currentPageNo}"/>/<span th:text="${attends.totalPageCount}"/>页&nbsp; 
+	                             <a class="pre bradius3 bgreen" th:if="${attends.previousPage}" th:href="@{/attend/statistic?pageNo=__${attends.currentPageNo - 1}__}">上一页</a>
+	                             <a class="pre bradius3 bgreen" th:if="${!attends.previousPage}">上一页</a>
+	                             <span th:each="pageNumber : ${attends.pageNumbers}">
+	                             	<span th:if="${pageNumber == attends.currentPageNo}">
+	                             		[<span class="" th:text="${pageNumber}"></span>]
+	                             	</span>
+	                             	<span th:if="${pageNumber != attends.currentPageNo}">
+	                             		<a th:href="@{/attend/statistic?pageNo=__${pageNumber}__}" th:text="${pageNumber}"></a>
+	                             	</span>
+	                             </span>
+	                    		 &nbsp;
+	                    		 <a class="next bradius3 bgreen" th:if="${attends.nextPage}" th:href="@{/attend/statistic?pageNo=__${attends.currentPageNo + 1}__}">下一页</a>
+	                    		 <a class="next bradius3 bgreen" th:if="${!attends.nextPage}">下一页</a>
+                        	</td>
+                        </tr>
+                    </table>
+                </form>
+            </div>
+            <div class="clear">
+            </div>
+        </div>
+    </div>
+	<div th:include="footer :: footer"></div>
+</body>
+</html>

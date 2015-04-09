@@ -1,0 +1,440 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head th:substituteby="header :: header">
+</head>
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+    <title>四川交通职业技术学院-教务综合应用管理</title>
+    <style type="text/css">
+        #add, #search {
+            width: 150px;
+            height: 35px;
+            font-weight: bold;
+        }
+
+        .depart {
+            width: 230px !important;
+        }
+
+        .tab_box {
+            width: 90%;
+            margin: 20px auto;
+            color: #666
+        }
+
+        .tab_box td {
+            padding: 10px 5px;
+        }
+
+        .tab_box .ipt_text {
+            width: 220px !important;
+        }
+
+        .tab_box .ipt_btn {
+            width: 80px !important;
+        }
+
+        .tab_box .error {
+            width: 230px !important;
+        }
+
+        .tab_box label {
+            font-size: 14px;
+        }
+
+        a.next, a.pre {
+            padding: 2px 5px;
+            color: #fff;
+        }
+    </style>
+    <script type="text/javascript" src="../../../resources/js/easydialog.min.js"></script>
+</head>
+
+<body>
+<!--顶部导航-->
+<input type="hidden" id="current_nav" value="index:departmentsetting:class"/>
+
+<div th:include="topbar :: topbar"></div>
+<div th:include="sidebar :: index_sidebar"></div>
+<!--右侧框架，内容区-->
+<div class="content">
+    <!---->
+    <div class="changePsw">
+        <div class="head2Box"><i class="i_q db fl"></i>
+
+            <h2 class="head2">班级管理</h2></div>
+        <div class="form">
+            <form name="class_list_form">
+                <table class="tb_operation">
+                    <tr class="tr_head">
+                        <td colspan="2">您可以执行以下操作：</td>
+                        <input type="hidden" th:value="@{/department/find}" id="find_dpt_url"/>
+                    </tr>
+                    <tr>
+                        <td align="left" width="50%">
+                            <label>请选择院系：</label>
+                            <select name="departmentId" class="ipt_menu depart" id="search_key">
+                                <option selected="true">请选择...</option>
+                                <option th:each="department : ${departments}"
+                                        th:value="${department.id}"
+                                        th:text="${department.name}">Wireframe
+                                </option>
+                            </select>
+                        </td>
+                        <td align="left" width="50%">
+                            <label>请选择专业：</label>
+                            <select name="major" id="search_major" class="ipt_menu">
+
+                            </select>
+
+                        </td>
+                    </tr>
+                    <tr>
+                        <td align="left" width="50%"><input type="button" class="ipt_btn bradius3 bblue" value="搜索"
+                                                            id="search_btn"/></td>
+                        <input type="hidden" id="search_url" th:value="@{/class/list}"/>
+                        <td align="left" width="50%"><input type="button" class="ipt_btn bradius3 bred" value="添加班级"
+                                                            id="add"/></td>
+                    </tr>
+                </table>
+                <table class="tb_xx">
+                    <tr class="tb_head">
+                        <th>No</th>
+                        <th>院系名称</th>
+                        <th>专业名称</th>
+                        <th>班级名称</th>
+                        <th colspan="2" class="td_operation" style=" background:#333440;">操作</th>
+
+                    </tr>
+                    <tr th:each="clazz : ${classes.resultData}">
+                        <input type="hidden" class="class_id"
+                               th:value="${clazz.id}"/>
+                        <td th:text="${clazzStat.index+1}">01</td>
+                        <input type="hidden" class="department_id"
+                               th:value="${clazz.major.department.id}"/>
+                        <td th:text="${clazz.major.department!=null?clazz.major.department.name:''}">计算机系</td>
+                        <input type="hidden" class="class_major_id"
+                               th:value="${clazz.major.id}"/>
+                        <td th:text="${clazz.major.name}">软件工程</td>
+                        <td th:text="${clazz.name}">软件工程一班</td>
+                        <td>
+                            <div><i class="i_edt db fl"></i><a class="a_opr db fl a_edit" href="javascript:void(0)"
+                                    >编辑</a></div>
+                        </td>
+                        <td>
+                            <div><i class="i_del db fl"></i><a class="a_opr db fl"
+                                                               th:href="@{/class/delete?id=__${clazz.id}__}">删除</a>
+                            </div>
+                        </td>
+                    </tr>
+
+                    <tr>
+                        <td colspan="7" align="center">
+                            共 <span th:text="${classes.totalCount}"/> 条记录 &nbsp; 第<span
+                                th:text="${classes.currentPageNo}"/>/<span th:text="${classes.totalPageCount}"/>页&nbsp;
+                            <a class="pre bradius3 bgreen" th:if="${classes.previousPage}"
+                               th:href="@{/class/list?pageNo=__${classes.currentPageNo - 1}__}">上一页</a>
+                            <a class="pre bradius3 bgreen" th:if="${!classes.previousPage}">上一页</a>
+                           <span th:each="pageNumber : ${classes.pageNumbers}">
+                              <span th:if="${pageNumber == classes.currentPageNo}">
+                             [<span class="" th:text="${pageNumber}"></span>]
+                             </span>
+                            <span th:if="${pageNumber != classes.currentPageNo}">
+                            <a th:href="@{/class/list?pageNo=__${pageNumber}__}"
+                               th:text="${pageNumber}"></a>
+                             </span>
+                             </span>
+                            &nbsp;
+                            <a class="next bradius3 bgreen" th:if="${classes.nextPage}"
+                               th:href="@{/class/list?pageNo=__${classes.currentPageNo + 1}__}">下一页</a>
+                            <a class="next bradius3 bgreen" th:if="${!classes.nextPage}">下一页</a>
+                        </td>
+                    </tr>
+                </table>
+            </form>
+        </div>
+        <div class="clear">
+        </div>
+    </div>
+</div>
+<!--弹出框-->
+
+<div class="dialog_box" id="add_class_dialog" style="display:none">
+    <div class="dl_title"><strong>添加班级</strong>
+        <a href="javascript:void(0)" title="关闭窗口" class="close_btn" id="closeBtn_add_class">&times;</a>
+    </div>
+    <form id="add_class_form">
+        <table class="tab_box">
+            <tr>
+                <td colspan="2" id="error_msg_for_add_class"></td>
+            </tr>
+            <tr>
+                <td class="font14" width="150" align="right">院系名称:</td>
+                <td>
+                    <select class="ipt_menu depart" id="add_class_department">
+                        <option selected="true">请选择...</option>
+                        <option th:each="department : ${departments}"
+                                th:value="${department.id}"
+                                th:text="${department.name}">Wireframe
+                        </option>
+                    </select>
+
+                </td>
+            </tr>
+            <tr>
+                <td class="font14" align="right">专业名称:</td>
+                <td>
+                    <select name="majorId" class="ipt_menu depart" id="add_class_search_major">
+
+                    </select>
+                </td>
+            </tr>
+            <tr>
+                <td class="font14" align="right">班级名称:</td>
+                <td>
+                    <input type="text" class="ipt_text" name="name"/>
+
+                    <!--<div class="err-wrap "><label id="error" class="error font12 ">错误信息显示在这里，没有的时候隐藏.</label></div>-->
+                </td>
+            </tr>
+            <tr>
+                <td colspan="2" align="center">
+                    <input type="hidden" th:value="@{/class/add}" id="add_class_url"/>
+                    <input type="button" class="ipt_btn bradius3 bblue" id="add_class_btn" value="提交"/>
+                    <a class="cancel">放弃</a>
+                </td>
+            </tr>
+        </table>
+    </form>
+
+</div>
+
+<div class="dialog_box" id="edit_class_dialog" style="display:none">
+    <div class="dl_title"><strong>编辑班级</strong>
+        <a href="javascript:void(0)" title="关闭窗口" class="close_btn" id="closeBtn_edit_class">&times;</a>
+    </div>
+    <form id="edit_class_form">
+        <table class="tab_box">
+            <tr>
+                <td colspan="2" id="error_msg_for_edit_class"></td>
+            </tr>
+            <tr>
+                <input type="hidden" id="edit_class_id" name="id"/>
+                <td class="font14" width="150" align="right">院系名称:</td>
+                <td>
+                    <select class="ipt_menu depart" id="edit_class_department">
+                        <option selected="true">请选择...</option>
+                        <option th:each="department : ${departments}"
+                                th:value="${department.id}"
+                                th:text="${department.name}">Wireframe
+                        </option>
+                    </select>
+
+                </td>
+            </tr>
+            <tr>
+                <td class="font14" align="right">专业名称:</td>
+                <td>
+                    <select name="majorId" class="ipt_menu depart" id="edit_class_major">
+
+                    </select>
+                </td>
+            </tr>
+            <tr>
+                <td class="font14" align="right">班级名称:</td>
+                <td>
+                    <input type="text" class="ipt_text" name="name" id="edit_class_name"/>
+
+                    <!--<div class="err-wrap "><label id="error" class="error font12 ">错误信息显示在这里，没有的时候隐藏.</label></div>-->
+                </td>
+            </tr>
+            <tr>
+                <td colspan="2" align="center">
+                    <input type="hidden" th:value="@{/class/update}" id="edit_class_url"/>
+                    <input type="button" class="ipt_btn bradius3 bblue" id="edit_class_btn" value="提交"/>
+                    <a class="cancel">放弃</a>
+                </td>
+            </tr>
+        </table>
+    </form>
+
+</div>
+
+<div th:include="footer :: footer"></div>
+<script th:src="@{/js/jquery.validate.min.js}" type="text/javascript"></script>
+<script type="text/javascript" th:src="@{/js/easydialog.min.js}"></script>
+<script type="text/javascript">
+    $(document).ready(function () {
+        $('#closeBtn_add_class, #closeBtn_edit_class, .cancel').click(function () {
+            easyDialog.close();
+        });
+
+
+        $('#add').click(function () {
+            easyDialog.open({
+                container: 'add_class_dialog',
+                fixed: false
+            });
+        });
+
+        $('.a_edit').click(function () {
+            var row = $(this).closest('tr');
+            var department_id = $(row).find('.department_id').val();
+            var major_name = $(row).find('td:eq(2)').html();
+            var class_name = $(row).find('td:eq(3)').html();
+            var class_id = $(row).find('.class_id').val();
+            var class_major_id = $(row).find('.class_major_id').html();
+
+            // 写入表单
+            $('#edit_class_id').val(class_id);
+            $('#edit_class_name').val(class_name);
+            $('#edit_class_major').val(major_name);
+            $('#edit_class_department').val(department_id);
+            var post_data = "dptId=" + department_id;
+            $.ajax({
+                url: $('#find_dpt_url').val(),
+                data: post_data,
+                type: 'POST',
+                success: function (result) {
+                    if (result.status === true) {
+                        $('#edit_class_major').empty();
+                        var data = result.data.majorList;
+                        data.forEach(function (major) {
+                            $('#edit_class_major').append("<option value=" + major.id + ">" + major.name + "</option>");
+                        })
+                        $('#edit_class_major').val(class_major_id);
+
+                    }
+                }
+            });
+            easyDialog.open({
+                container: 'edit_class_dialog',
+                fixed: false
+            });
+        });
+
+
+        $('#edit_class_department').change(function () {
+//            alert($(this).val());
+            var departmentId = $(this).val();
+            var post_data = "dptId=" + departmentId;
+            $.ajax({
+                url: $('#find_dpt_url').val(),
+                data: post_data,
+                type: 'POST',
+                success: function (result) {
+                    if (result.status === true) {
+                        $('#edit_class_major').empty();
+                        var data = result.data.majorList;
+
+                        data.forEach(function (major) {
+                            $('#edit_class_major').append("<option value=" + major.id + ">" + major.name + "</option>");
+                        })
+                    }
+                }
+            });
+        });
+
+        $('#edit_class_btn').click(function () {
+            // 禁用按钮
+//                $(this).attr("disabled", "disabled");
+
+            var post_data = $('#edit_class_form').serializeArray();
+            $.ajax({
+                url: $('#edit_class_url').val(),
+                data: post_data,
+                type: 'POST',
+                success: function (data) {
+                    if (data.status === true) {
+                        $('#error_msg_for_edit_class').html(data.msg);
+                        setTimeout(window.location.reload(), 1500);
+                    } else {
+                        $('#error_msg_for_edit_class').html(data.errors[0].defaultMessage);
+                    }
+                }
+            });
+        });
+
+
+        $('#add_class_btn').click(function () {
+            // 禁用按钮
+//                $(this).attr("disabled", "disabled");
+
+            var post_data = $('#add_class_form').serializeArray();
+            $.ajax({
+                url: $('#add_class_url').val(),
+                data: post_data,
+                type: 'POST',
+                success: function (data) {
+                    if (data.status === true) {
+                        $('#error_msg_for_add_class').html(data.msg);
+                        setTimeout(window.location.reload(), 1500);
+                    } else {
+                        $('#error_msg_for_add_class').html(data.errors[0].defaultMessage);
+                    }
+                }
+            });
+        });
+
+
+        $('#add_class_department').change(function () {
+//            alert($(this).val());
+            var departmentId = $(this).val();
+            var post_data = "dptId=" + departmentId;
+            $.ajax({
+                url: $('#find_dpt_url').val(),
+                data: post_data,
+                type: 'POST',
+                success: function (result) {
+                    if (result.status === true) {
+                        $('#add_class_search_major').empty();
+                        var data = result.data.majorList;
+
+                        data.forEach(function (major) {
+                            $('#add_class_search_major').append("<option value=" + major.id + ">" + major.name + "</option>");
+                        })
+
+
+                    }
+                }
+            });
+        });
+
+
+        $('#search_key').change(function () {
+//            alert($(this).val());
+            var departmentId = $(this).val();
+            var post_data = "dptId=" + departmentId;
+            $.ajax({
+                url: $('#find_dpt_url').val(),
+                data: post_data,
+                type: 'POST',
+                success: function (result) {
+                    if (result.status === true) {
+                        $('#search_major').empty();
+                        var data = result.data.majorList;
+
+                        data.forEach(function (major) {
+                            $('#search_major').append('<option value=' + major.id + '>' + major.name + '</option>');
+                        })
+
+
+                    }
+                }
+            });
+        });
+
+        // 搜索
+        $('#search_btn').click(function () {
+            var search_major = $('#search_major').find("option:selected").text();
+            if (search_major != "请选择...") {
+                window.location.href = $('#search_url').val() + '?search=' + encodeURI(encodeURI(search_major));
+            }
+            else {
+                window.location.href = $('#search_url').val();
+            }
+        });
+    });
+</script>
+</body>
+</html>

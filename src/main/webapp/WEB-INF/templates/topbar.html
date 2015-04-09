@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<body>
+<div th:fragment="topbar">
+    <div class="top">
+        <img th:src="@{/css/images/main_logo.jpg}"
+             src="../../resources/css/images/main_logo.jpg" class="logo fl"/>
+        <ul class="top_menu fl">
+            <li class="current fl home"><i class="i_home db fl"></i><a
+                    class="fl" th:href="@{/index}">首页</a></li>
+            <li class="fl index" sec:authorize="hasAnyRole('ROLE_ADMIN')"><i class="i_set db fl"></i><a class="fl" th:href="@{/user_manage/list}">系统设置</a></li>
+            <li class="fl tech_manage" sec:authorize="hasAnyRole('ROLE_ADMIN')"><i class="i_jw db fl"></i><a class="fl" th:href="@{/task}">教务常规管理</a></li>
+            <li class="fl tech_manage" sec:authorize="hasAnyRole('ROLE_TEACHER')"><i class="i_jw db fl"></i><a class="fl" th:href="@{/attend/teacher}">教务常规管理</a></li>
+            <li class="fl tech_manage" sec:authorize="hasAnyRole('ROLE_STUDENT','ROLE_CLASS_MONITOR')"><i class="i_jw db fl"></i><a class="fl" th:href="@{/attend/student}">教务常规管理</a></li>
+            
+        </ul>
+        <div class="exit_wrap fr">
+            <i class="i_exit db fl"></i> <a class="exit fl" th:href="@{/logout}">注销</a>
+        </div>
+    </div>
+</div>
+</body>
+</html>
