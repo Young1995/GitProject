@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head th:substituteby="header :: header">
+</head>
+<head>
+<title>四川交通职业技术学院-首页</title>
+<link th:href="@{/css/home.css}" href="../../resources/css/main.css" rel="stylesheet" type="text/css"/>
+</head>
+<body>
+	<input type="hidden" id="current_nav" value="home:index:index"/>
+	<div th:include="topbar :: topbar"></div>
+	<div th:include="sidebar :: home_sidebar"></div>
+	<!--右侧框架，内容区-->
+	<div class="content">
+		<!--欢迎信息与时间-->
+		<div class="wel-time">
+			<div class="welcome fl">
+				<i class="i_notice db fl"></i>
+				<p class="font16 fl">您好，欢迎使用本校教务综合应用管理系统！</p>
+			</div>
+			<div class="timeBox fr">
+				<div class="time fl bradius3">
+					<strong class="hour">08:24</strong> <small class="am-pm">PM</small>
+				</div>
+				<div class="date fl bradius3">
+					<span class="yy-mm font14">2014年5月</span> <strong class="dd">12</strong>
+					<small class="font14">日</small>
+				</div>
+			</div>
+			<div class="clear"></div>
+		</div>
+		<!--我的教学-->
+		<div class="myjx">
+			<div class="head2Box">
+				<i class="i_q db fl"></i>
+				<h2 class="head2">我的教学</h2>
+			</div>
+			<div class="actionBox">
+				<a class="db fbzy fl"></a> <a class="db wykk fl"></a> <a
+					class="db fbtl fl"></a> <a class="db fbks fl"></a>
+			</div>
+			<div class="clear"></div>
+		</div>
+		<!--我的课程-->
+		<div class="mykc">
+			<div class="head2Box">
+				<i class="i_q db fl"></i>
+				<h2 class="head2">我的课程</h2>
+			</div>
+			<table class="tb_class">
+				<tr>
+					<td width="130"><a class="class bred font16 bradius3">软工一班</a></td>
+					<td>未批改作业<a class="alink">1</a>份，学生回复讨论<a class="alink">1</a>次，待答问题<a
+						class="alink">0</a>个；
+					</td>
+				</tr>
+				<tr>
+					<td width="130"><a class="class byellow font16 bradius3">交通二班</a></td>
+					<td>未批改作业<a class="alink">1</a>份，学生回复讨论<a class="alink">1</a>次，待答问题<a
+						class="alink">1</a>个；
+					</td>
+				</tr>
+			</table>
+			<div class="clear"></div>
+		</div>
+	</div>
+	
+	<div th:include="footer :: footer"></div>
+	<script type="text/javascript">
+		$(document).ready(function() {
+			var date = new Date();
+			var hour = date.getHours();
+			var am_pm = date.getHours() >= 12 ? 'PM' : 'AM';
+			hour = date.getHours() >12 ? date.getHours() - 12 : date.getHours();
+			hour = (hour + '').length == 2 ? hour : 0 + '' + hour;
+			var mins = (date.getMinutes() + '').length == 2 ? date.getMinutes() : 0 + '' + date.getMinutes();
+			
+			$('.hour').html(hour + ':' + mins);
+			$('.am-pm').html(am_pm);
+			
+			$('.yy-mm').html(date.getFullYear() + '年' + (date.getMonth() + 1) + '月');
+			$('.dd').html(date.getDate());
+		});
+	</script>
+</body>
+</html>

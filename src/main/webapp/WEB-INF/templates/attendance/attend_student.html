@@ -1,0 +1,170 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head th:substituteby="header :: header">
+</head>
+<head>
+<title>四川交通职业技术学院-学生考勤</title>
+<style type="text/css" >
+#add,#search { width:150px; height:35px; font-weight:bold;}
+.depart { width:230px !important;}
+.tab_box { width:90%; margin:20px auto; color:#666 }
+.tab_box td { padding:10px 5px;}
+.tab_box .ipt_text { width:220px !important;}
+.tab_box .ipt_btn{ width:80px !important;}
+.tab_box .error { width:230px !important;}
+.tab_box label { font-size:14px;}
+a.next,a.pre { padding:2px 5px; color:#fff;}
+.ke-container { width:480px !important;}
+.editBox { width:750px;}
+.viewBox { width:1000px;}
+.view:hover { color:#F00; text-decoration:underline;}
+
+.green {color: green !important;}
+.red {color: red !important;}
+.pdiv {width: 100%;height: 500px;overflow: auto;}
+.txtlal {margin-bottom: 15px; }
+.tb_operation {color: #666;}
+</style>
+</head>
+<body>
+	<input type="hidden" id="current_nav" value="tech_manage:attendance:student_check"/>
+	<div th:include="topbar :: topbar"></div>
+	<div th:include="sidebar :: tech_manage_sidebar"></div>
+	<!--右侧框架，内容区-->
+
+<!--右侧框架，内容区-->
+	<div class="content">   
+        <!---->
+        <div class="changePsw">
+        	<div class="head2Box"><i class="i_q db fl"></i><h2 class="head2">学生考勤</h2></div>
+            <div class="form">
+            	<form name="changePsw">
+                    <table class="tb_xx">
+                    	<tr class="tb_head">
+                            <th>No</th>
+                            <th>考勤编号</th>
+                            <th>考勤班级</th>
+                            <th>上课地点</th>
+                            <th>完成时间</th>
+                            <th>发布时间</th>
+                            <th class="td_operation" style=" background:#333440; width:120px;">考勤操作</th>
+                        </tr>
+                        <tr th:each="attend,iterationStatus : ${attends.resultData}">
+                            <td th:text="${iterationStatus.count}">01</td>
+                            <td th:text="${attend.attendNo}">20150101001</td>
+                            <td th:text="${attend.course.className}">信息技术2013级1班</td>
+                            <td th:text="${attend.course.classRoom}"></td>
+                            <td th:text="${attend.finishDate == null ? '' : #dates.format(attend.finishDate, 'yyyy-MM-dd HH:mm:ss')}">2015/01/07 13:20:00</td>
+                            <td th:text="${attend.pubDate == null ? '' : #dates.format(attend.pubDate, 'yyyy-MM-dd HH:mm:ss')}">2014/01/01 12:20:25</td>
+                            <td th:if="${!attend.checked}"><div style="width:80px;"><i class="i_edt db fl"></i><a class="a_opr db fl a_edit" href="javascript:void(0)" >进入考勤</a><input type="hidden" th:value="${attend.id}"/></div></td>
+                            <td th:if="${attend.checked}"><div><a class="a_opr db fl green view">查看</a><input type="hidden" th:value="${attend.id}"/></div></td>
+                        </tr>
+                        <tr>
+                        	<td colspan="7">
+                        		共 <span th:text="${attends.totalCount}"/> 条记录 &nbsp;  第<span th:text="${attends.currentPageNo}"/>/<span th:text="${attends.totalPageCount}"/>页&nbsp; 
+	                             <a class="pre bradius3 bgreen" th:if="${attends.previousPage}" th:href="@{/attend/student?pageNo=__${attends.currentPageNo - 1}__}">上一页</a>
+	                             <a class="pre bradius3 bgreen" th:if="${!attends.previousPage}">上一页</a>
+	                             <span th:each="pageNumber : ${attends.pageNumbers}">
+	                             	<span th:if="${pageNumber == attends.currentPageNo}">
+	                             		[<span class="" th:text="${pageNumber}"></span>]
+	                             	</span>
+	                             	<span th:if="${pageNumber != attends.currentPageNo}">
+	                             		<a th:href="@{/attend/student?pageNo=__${pageNumber}__}" th:text="${pageNumber}"></a>
+	                             	</span>
+	                             </span>
+	                    		 &nbsp;
+	                    		 <a class="next bradius3 bgreen" th:if="${attends.nextPage}" th:href="@{/attend/student?pageNo=__${attends.currentPageNo + 1}__}">下一页</a>
+	                    		 <a class="next bradius3 bgreen" th:if="${!attends.nextPage}">下一页</a>
+                        	</td>
+                        </tr>
+                    </table>
+                </form>
+            </div>
+            <div class="clear">
+            </div>
+        </div>
+    </div>
+  <!--弹出框-->
+
+  <div class="dialog_box editBox" id="edit_dialog" style="display:none">
+	<div class="dl_title"><strong>考勤</strong>
+    <a href="javascript:void(0)" title="关闭窗口" class="close_btn" id="closeBtn">&times;</a>
+    </div>
+    	<form id="operation_form">
+        <table class="tab_box">
+        	<tr>
+            	<td colspan="2" class="font14" id="op_msg" width="150" align="center" style="color:red;"></td>
+            </tr>
+        	
+        	<tr th:if="${setting.displayCourseName}">
+               <td class="font14" width="150" align="right">课程名称:</td>
+               <td>
+                   <span class="font14 c_courseName"></span>
+               </td>
+           </tr>
+           <tr th:if="${setting.displayBeginTime}">
+               <td class="font14" width="150" align="right">上课时间:</td>
+               <td class="c_begin_radios">
+               </td>
+           </tr>
+           <tr th:if="${setting.displayEndTime}">    
+               <td class="font14" width="150" align="right">下课时间:</td>
+               <td class="c_endtime_radios">
+               </td>
+           </tr>
+           <tr th:if="${setting.displayClassRoom}">
+               <td class="font14" align="right">上课地点:</td>
+               <td>
+               		<span class="font14 c_classroom"></span>
+               </td>
+           </tr>
+           <tr>
+               <td colspan="2" align="center">
+                   <input type="button" class="ipt_btn bradius3 bblue" id="edit_closeBtn" value="提交" />
+                   <a class="cancel" id="edit_closeBtn">放弃</a>
+                   <input type="hidden" class="c_op_id" name="id"/>
+                   <input type="hidden" th:value="@{/attend}" class="c_check_url"/>
+               </td>
+           </tr>
+        </table>
+   		</form>
+    
+    
+</div>
+<div class="dialog_box" id="view_dialog" style="display:none; width: 700px;">
+	<div class="dl_title">
+        <strong>考勤</strong>
+        <a href="javascript:void(0)" title="关闭窗口" class="close_btn" id="edit_closeBtn">&times;</a>
+    </div>
+    <div class="pdiv">
+        <table class="tab_box">
+            <tr th:if="${setting.displayCourseName}">
+               <td class="font14" width="150" align="right">课程名称:</td>
+               <td class="font14 v_courseName">
+               </td>
+           </tr>
+           <tr th:if="${setting.displayBeginTime}">
+               <td class="font14" width="150" align="right">上课时间:</td>
+               <td class="font14 v_begintime">
+               </td>
+           </tr>
+           <tr th:if="${setting.displayEndTime}">    
+               <td class="font14" width="150" align="right">下课时间:</td>
+               <td class="font14 v_endtime">
+               </td>
+           </tr>
+           <tr th:if="${setting.displayClassRoom}">
+               <td class="font14" align="right">上课地点:</td>
+               <td class="font14 v_classroom">
+               </td>
+           </tr>
+        </table>
+   		</div>
+   </div>
+    <input type="hidden" id="query_attend_url" th:value="@{/attend}"/>
+	<div th:include="footer :: footer"></div>
+	<script th:src="@{/js/jquery.validate.min.js}" type="text/javascript"></script>
+	<script type="text/javascript" th:src="@{/js/easydialog.min.js}"></script>
+	<script type="text/javascript" th:src="@{/js/attend/attend.js}"></script>
+</body>
+</html>

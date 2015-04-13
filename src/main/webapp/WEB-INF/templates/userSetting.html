@@ -1,0 +1,204 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+        "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:th="http://www.thymeleaf.org">
+<head th:substituteby="header :: header"></head>
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+    <title>四川交通职业技术学院-教务综合应用管理</title>
+    <link th:href="@{/css/usersetting.css}" href="../../resources/css/usersetting.css" rel="stylesheet"
+          type="text/css"/>
+
+    <!--/*编辑器*/-->
+    <link th:href="@{/css/default.css}" rel="stylesheet" href="../../resources/css/default.css"/>
+    <style>
+    	.tab_box { width:90%; margin:20px auto; color:#666 }
+.tab_box td { padding:10px 5px;}
+.tab_box .ipt_text { width:230px !important;}
+.tab_box .ipt_btn{ width:80px !important;}
+.tab_box .error { width:230px !important;}
+.tab_box label { font-size:14px;}
+    </style>
+</head>
+
+<body>
+<!--顶部导航-->
+<div th:include="topbar :: topbar"></div>
+<!--左侧二级导航-->
+
+<div th:include="sidebar :: index_sidebar"></div>
+<!--右侧框架，内容区-->
+<div class="content">
+    <!--修改密码-->
+    <div class="changePsw">
+        <div class="head2Box"><i class="i_q db fl"></i>
+
+            <h2 class="head2">用户设置</h2></div>
+        <div class="form">
+            <form name="changePsw" th:action="@{/user/updateProfile}" method="POST">
+                <table width="700" border="3" align="center" class="tb_form" th:object="${user}">
+                    <tr>
+                        <td rowspan="7" class="myPic" align="center" width="160">
+                            <label>我的头像：</label>
+
+                            <div class="pic bradius3"><img th:src="@{/__${#authentication.principal.userProfile == null ? 'css/images/default_user.png' : #authentication.principal.userProfile.storePath}__}"
+                                                           src="../../resources/images/default_user.png"
+                                                           class="bradius3 user_profile" width="140" height="140"/>
+                            </div>
+                            <input type="button" name="changePic" class="ipt_btn bradius3 change_profile" value="更换图片"/>
+                            <a
+                                class="delete delete_profile">删 除</a>
+                        </td>
+                        <td align="right" width="120"><label class="">用户名：</label></td>
+                        <td align="left"><span th:text="*{username}"/><input type="hidden" name="username" class="ipt_text fl" th:value="*{username}"/>
+
+                            <div class="err-wrap fl "><label th:if="${errors != null and errors['username'] != null}"
+                                                             class="error font12"
+                                                             th:text="${errors['username']}"></label>
+                            </div>
+                        </td>
+                    </tr>
+                    <tr>
+
+                        <td align="right"><label class="">姓名：</label></td>
+                        <td align="left"><input type="text" name="name" class="ipt_text fl" th:value="*{name}"/>
+
+                            <div class="err-wrap fl invisible"><label
+                                    th:if="${errors != null and errors['name'] != null}"
+                                    class="error font12" th:text="${errors['name']}"/>
+                            </div>
+                        </td>
+                    </tr>
+                    <tr>
+
+                        <td align="right"><label class="">工号/学号：</label></td>
+                        <td align="left"><input type="text" name="positionNo" class="ipt_text fl"
+                                                th:value="*{positionNo}"/>
+
+                            <div class="err-wrap fl"><label
+                                    th:if="${errors != null and errors['positionNo'] != null}"
+                                    class="error font12"
+                                    th:text="${errors['positionNo']}"/>
+                            </div>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td align="right"><label>性别：</label></td>
+                        <td align="left"><label for="sex">男</label><input type="radio" name="gender" id="gender"
+                                                                          value="0"
+                                                                          class="ipt_radio"
+                                                                          th:checked="*{gender == false}"/>
+                            <label for="sex">女</label><input type="radio" name="gender" id="gender" value="1"
+                                                             class="ipt_radio" th:checked="*{gender == true}"/>
+
+                            <div class="err-wrap invisible"><label id="error"
+                                                                   class="error font12 ">错误信息显示在这里，没有的时候隐藏.</label>
+                            </div>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td align="right"><label class="">手机：</label></td>
+                        <td align="left"><input type="text" name="phoneNumber" class="ipt_text fl"
+                                                th:value="*{phoneNumber}"/>
+
+                            <div class="err-wrap fl"><label
+                                    th:if="${errors != null and errors['phoneNumber'] != null}"
+                                    class="error font12"
+                                    th:text="${errors['phoneNumber']}"/>
+                            </div>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td align="right"><label class="">Email：</label></td>
+                        <td align="left"><input type="text" name="email" class="ipt_text fl" th:value="*{email}"/>
+
+                            <div class="err-wrap fl"><label
+                                    th:if="${errors != null and errors['email'] != null}"
+                                    class="error font12"
+                                    th:text="${errors['email']}"/>
+                            </div>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td align="right"><label>所属院系：</label></td>
+                        <td align="left">
+                        	<input type="hidden" id="selected_dep" th:value="*{department}"/>
+                            <select name="department" size="1" class="ipt_menu load_department" id="department">
+                                <option value="1">计算机科学与技术</option>
+                                <option value="2">机电</option>
+                                <option value="3">英语</option>
+                            </select>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td colspan="3">
+                            <label class="lbl_imf">编辑个人信息：</label>
+                            <textarea class="db" name="description" style="width:680px;height:200px;visibility:hidden;" th:text="*{description}">在这里编辑您的个人信息</textarea>
+                        </td>
+
+                    </tr>
+                    <tr>
+                        <td colspan="3" align="center"><input type="submit" name="submit" id="submit" value="提     交"
+                                                              class="ipt_submit btn font16"/> <a class="cancel">取 消</a>
+                        </td>
+
+                    </tr>
+
+                </table>
+
+            </form>
+            
+            <div style="display:none;" id="profile_setting">
+            	<input type="file" name="uploadImage" id="uploadImage" style="display:none;" />
+            	<input type="hidden" id="upload_url" th:value="@{/upload_profile}" />
+            </div>
+        </div>
+        <div class="clear">
+        </div>
+    </div>
+</div>
+<!-- 删除用户 -->	
+<div class="dialog_box" id="delete_dialog" style="display:none">
+	<div class="dl_title"><strong>删除该头像</strong>
+    <a href="javascript:void(0)" title="关闭窗口" class="close_btn" id="closeBtn_excel">&times;</a>
+    </div>
+        <table class="tab_box">
+        	<tr>
+            	<td align="center" style="color:red;" id="delete_msg"></td>
+            </tr>
+        	<tr>
+            	<td align="center">确定删除该头像？</td>
+            </tr>
+            <tr>
+            	<td align="center">
+                	<input type="button" class="ipt_btn bradius3 bblue tj" id="confirm_delete_btn" value="提交" />
+                	<input type="hidden" id="delete_url" th:value="@{/delete_profile}"/>
+                    <a class="cancel">放弃</a>
+                </td>
+            </tr>
+        </table>
+</div>
+<input type="hidden" id="load_department" th:value="@{/load_department}"/>
+<div th:include="footer :: footer"></div>
+</body>
+<script charset="utf-8" th:src="@{/js/kindeditor-min.js}" src="../../resources/js/kindeditor-min.js"></script>
+<script charset="utf-8" th:src="@{/js/zh_CN.js}" src="../../resources/js/zh_CN.js"></script>
+<script>
+    var editor;
+    KindEditor.ready(function (K) {
+        editor = K.create('textarea[name="description"]', {
+            resizeType: 1,
+            allowPreviewEmoticons: false,
+            allowImageUpload: false,
+            items: [
+                'fontname', 'fontsize', '|', 'forecolor', 'hilitecolor', 'bold', 'italic', 'underline',
+                'removeformat', '|', 'justifyleft', 'justifycenter', 'justifyright', 'insertorderedlist',
+                'insertunorderedlist', '|', 'emoticons', 'image', 'link']
+        });
+    });
+</script>
+<script type="text/javascript" th:src="@{/js/common.js}"></script>
+<script type="text/javascript" th:src="@{/js/ajaxfileupload.js}"></script>
+<script type="text/javascript" th:src="@{/js/easydialog.min.js}"></script>
+<script type="text/javascript" th:src="@{/js/users/userprofile.js}"></script>
+</html>

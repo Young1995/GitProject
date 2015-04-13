@@ -1,0 +1,41 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+        "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+    <title>四川交通职业技术学院教务管理系统-用户登录系统</title>
+    <link th:href="@{/css/style.css}" rel="stylesheet"/>
+    <link th:href="@{/css/login.css}" rel="stylesheet"/>
+</head>
+
+<body>
+<div class="w1000">
+    <div class="cont-box">
+        <img th:src="@{/css/images/logo.jpg}" class="fr" alt="四川交通职业技术学院教务管理系统-用户登录系统" title="四川交通职业技术学院教务管理系统-用户登录系统"/>
+
+        <div class="form pre fr">
+            <form name="Flogin" id="Flogin" class="f-login" th:action="@{/check_login}" method="POST">
+                <div class="user txt pre">
+                    <i class="db i-user fl"></i>
+                    <input type="text" maxlength="" class="ipt-user fr" width="260px" name="username"
+                           placeholder="输入用户名"/>
+                </div>
+                <div class="psw txt pre ">
+                    <i class="db i-psw fl"></i>
+                    <input type="password" maxlength="" class="ipt-psw fr" width="260px" name="password"
+                           placeholder="输入密码"/>
+                </div>
+                <label th:if="${param.error != null and param.error[0] == 'true'}" id="error" class="error font12 ">用户名或密码错误</label>
+                <input type="button" value="注   册" class="ipt-rgtr fr btn"
+                       th:onclick="'javascript:window.location.href=\'' + @{/register} + '\''"/>
+                <input type="submit" value="登     录" class="ipt-login fr btn"/>
+                <a href="#" class="fgtpsw fr font12 red udrline">忘记密码？</a>
+
+                <div class="auto fr font12"><input type="checkbox" class="chkbox"/><label>自动登陆</label></div>
+            </form>
+        </div>
+    </div>
+</div>
+</body>
+</html>
